@@ -1,0 +1,22 @@
+[package]
+name = "gmn_api_routes"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "gmn_api_routes"
+path = "src/lib.rs"
+doctest = false
+
+[dependencies]
+actix-web = { workspace = true }
+serde_json = { workspace = true }
+serde = { workspace = true }
+sha2 = { workspace = true }
+reqwest = { workspace = true }
+gmn_utils = { workspace = true }
+gmn_db_schema = { workspace = true }
+gmn_db = { workspace = true }
+rand = { workspace = true }

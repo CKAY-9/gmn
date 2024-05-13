@@ -1,0 +1,17 @@
+[package]
+name = "gmn_utils"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "gmn_utils"
+path = "src/lib.rs"
+doctest = false
+
+[dependencies]
+actix-web = { workspace = true }
+dotenv = { workspace = true }
+chrono = { workspace = true }
+iso8601 = { workspace = true }

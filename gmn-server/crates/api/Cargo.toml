@@ -1,0 +1,15 @@
+[package]
+name = "gmn_api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "gmn_api"
+path = "src/lib.rs"
+doctest = false
+
+[dependencies]
+actix-web = { workspace = true }
+gmn_api_routes = { workspace = true }

@@ -1,0 +1,17 @@
+[package]
+name = "gmn_db"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "gmn_db"
+path = "src/lib.rs"
+doctest = false
+
+[dependencies]
+gmn_utils = { workspace = true }
+gmn_db_schema = { workspace = true }
+diesel = { workspace = true }
+dotenv = { workspace = true }
