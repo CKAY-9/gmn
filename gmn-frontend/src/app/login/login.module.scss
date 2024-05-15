@@ -1,0 +1,24 @@
+.oauths {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.5rem;
+
+  .oauth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    width: fit-content;
+    color: white;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}

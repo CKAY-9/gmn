@@ -1,4 +1,32 @@
 .nav_menu {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--primary);
+	padding: 1rem;
+
+	.container {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.nav {
+		display: flex;
+		flex-direction: column;
+
+		a {
+			padding: 0.5rem 2rem;
+			border-radius: 0.5rem;
+
+			&:hover {
+				text-decoration: none;
+				background-color: var(--accent);
+			}
+		}
+	}
+
+	* {
+		color: #fff;
+	}
 }

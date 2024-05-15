@@ -1,0 +1,15 @@
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 400px));
+  gap: 1rem;
+
+  .feature {
+    padding: 1rem;
+    background-color: var(--secondary);
+    border-radius: 0.5rem;
+    
+    .title {
+      text-align: center;
+    }
+  }
+}
