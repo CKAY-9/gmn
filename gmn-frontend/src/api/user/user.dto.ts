@@ -5,7 +5,7 @@ export interface UserDTO {
     username: string,
     avatar: string,
     bio: string,
-    personal_records: string[],
+    personal_records: number[],
     journal_entries: number[],
     usergroups: number[]
 }

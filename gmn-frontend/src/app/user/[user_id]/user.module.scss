@@ -1,0 +1,41 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .subject {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--secondary);
+    box-shadow: var(--shdw1);
+    border-radius: 0.5rem;
+  }
+
+  header {
+    .splash {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .username {
+      font-size: 3rem;
+      font-weight: 900;
+    }
+  }
+
+  .prs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

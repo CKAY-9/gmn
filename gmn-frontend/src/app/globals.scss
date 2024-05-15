@@ -6,10 +6,15 @@
   --primary: #2f27ce;
   --secondary: #dfddff;
   --accent: #433bff;
+  
+  --shdw1: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  --shdw2: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --shdw3: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 * {
   font-family: "Poppins", sans-serif;
+  font-size: 18px;
 }
 
 body {
@@ -26,6 +31,39 @@ a {
     text-decoration: underline;
     opacity: 1;
   }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
 }
 
 .app_container {

@@ -26,27 +26,27 @@ pub async fn login_with_discord(
             ("client_secret", get_env_var("DISCORD_OAUTH_SECRET")),
             ("code", query.code.to_string()),
             ("grant_type", "authorization_code".to_string()),
-            ("redirect_uri", get_local_api_url() + "/users/auth/discord"),
+            ("redirect_uri", get_local_api_url() + "/user/auth/discord"),
         ])
         .header("Content-Type", "application/x-www-form-urlencoded")
         .send()
         .await?;
-    let inital_response_parsed: DiscordInitialDTO =
+    let inital_response_parsed =
         serde_json::from_str::<DiscordInitialDTO>(inital_response.text().await?.as_str())?;
     let user_response = client
         .get("https://discord.com/api/v10/users/@me")
         .header(
             "authorization",
             format!(
-                "{} {}",
-                inital_response_parsed.token_type, inital_response_parsed.access_token
+                "Bearer {}",
+                inital_response_parsed.access_token
             ),
         )
         .send()
         .await?;
     if user_response.status() != 200 {
         return Ok(
-            Redirect::to(format!("{}/user/login?msg=ue", get_env_var("FRONTEND_URL"))).permanent(),
+            Redirect::to(format!("{}/login?msg=ue", get_env_var("FRONTEND_URL"))).permanent(),
         );
     }
 
@@ -68,7 +68,7 @@ pub async fn login_with_discord(
         let _ = update_user_from_id(user.id, update);
 
         return Ok(Redirect::to(format!(
-            "{}/user/login?token={}",
+            "{}/login?token={}",
             get_env_var("FRONTEND_URL"),
             user.token
         )));
@@ -101,7 +101,7 @@ pub async fn login_with_discord(
     };
     let _insert: Option<User> = create_user(new_user);
     Ok(Redirect::to(format!(
-        "{}/user/login?token={}",
+        "{}/login?token={}",
         get_env_var("FRONTEND_URL"),
         user_token
     ))

@@ -8,7 +8,7 @@ export const getUserFromID = async (
 ): Promise<UserDTO | null> => {
 	try {
 		const request = await axios({
-			url: API_URL + "/users",
+			url: API_URL + "/user",
 			method: "GET",
 			params: {
 				user_id: user_id,
@@ -28,7 +28,7 @@ export const getUserFromToken = async (
 ): Promise<UserDTO | null> => {
 	try {
 		const request = await axios({
-			url: API_URL + "/users",
+			url: API_URL + "/user",
 			method: "GET",
 			headers: {
 				Authorization: token,

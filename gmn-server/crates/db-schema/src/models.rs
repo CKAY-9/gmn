@@ -11,7 +11,7 @@ pub struct User {
     pub username: String,
     pub avatar: String,
     pub bio: String,
-    pub personal_records: Vec<String>,
+    pub personal_records: Vec<i32>,
     pub journal_entries: Vec<i32>,
     pub usergroups: Vec<i32>
 }
@@ -24,7 +24,7 @@ pub struct NewUser {
     pub username: String,
     pub avatar: String,
     pub bio: String,
-    pub personal_records: Vec<String>,
+    pub personal_records: Vec<i32>,
     pub journal_entries: Vec<i32>,
     pub usergroups: Vec<i32>
 }

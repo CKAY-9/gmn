@@ -1,6 +1,7 @@
 import Link from "next/link";
 import style from "./nav-menu.module.scss";
 import { UserDTO } from "@/api/user/user.dto";
+import UserChip from "../user-chip/user-chip";
 
 const NavMenu = (props: {
 	user: UserDTO | null
@@ -29,6 +30,9 @@ const NavMenu = (props: {
 						</>
 					) : (
 						<>
+							<Link href={`/user/${props.user.id}`} style={{"padding": "0"}}>
+								<UserChip user={props.user} />
+							</Link>
 						</>
 					)}
 				</section>

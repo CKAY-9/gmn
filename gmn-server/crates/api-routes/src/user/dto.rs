@@ -5,10 +5,10 @@ pub struct UserOAuthDTO {
     pub code: String
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub struct DiscordInitialDTO {
-    pub access_token: String,
     pub token_type: String,
+    pub access_token: String,
 }
 
 #[derive(Deserialize)]

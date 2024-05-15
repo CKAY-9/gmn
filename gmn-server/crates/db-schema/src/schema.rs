@@ -1,3 +1,5 @@
+// @generated automatically by Diesel CLI.
+
 diesel::table! {
     exercises (id) {
         id -> Int4,
@@ -35,7 +37,7 @@ diesel::table! {
         username -> Text,
         avatar -> Text,
         bio -> Text,
-        personal_records -> Array<Text>,
+        personal_records -> Array<Int4>,
         journal_entries -> Array<Int4>,
         usergroups -> Array<Int4>,
     }

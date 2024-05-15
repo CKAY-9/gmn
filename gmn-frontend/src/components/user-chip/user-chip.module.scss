@@ -1,0 +1,17 @@
+.user_chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+
+  .avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+  }
+
+  .username {
+    font-weight: 600;
+  }
+}
