@@ -33,6 +33,21 @@ a {
   }
 }
 
+input, textarea {
+  resize: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom: 1px solid var(--accent);
+  padding: 0 0.5rem;
+  box-shadow: var(--shdw1);
+  transition: 0.35s ease all;
+
+  &:focus, &:active {
+    outline: none;
+    border: 1px solid var(--accent);
+  }
+}
+
 button {
   background-color: transparent;
   border: none;
