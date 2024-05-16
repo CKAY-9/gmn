@@ -1,5 +1,5 @@
 use actix_web::web;
-use gmn_api_routes::user::get::{get_user, login_with_discord};
+use gmn_api_routes::user::{get::{get_user, login_with_discord}, put::{update_personal_reconds, update_user}};
 
 pub fn configure_api(cfg: &mut web::ServiceConfig) {
     cfg.service(
@@ -15,6 +15,8 @@ pub fn config_user(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/user")
             .service(get_user)
+            .service(update_user)
+            .service(update_personal_reconds)
             .service(
                 web::scope("/auth")
                     .service(login_with_discord)   

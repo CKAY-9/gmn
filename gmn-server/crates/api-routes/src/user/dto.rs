@@ -22,3 +22,15 @@ pub struct DiscordUserDTO {
 pub struct GetUserDTO {
     pub user_id: Option<i32>
 }
+
+#[derive(Deserialize)]
+pub struct UpdateRecordsDTO {
+    pub bench: i32,
+    pub squat: i32,
+    pub deadlift: i32
+}
+
+#[derive(Deserialize)]
+pub struct UpdateUserDTO {
+    pub bio: String
+}

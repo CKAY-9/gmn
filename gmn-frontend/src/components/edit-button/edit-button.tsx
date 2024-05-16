@@ -10,7 +10,7 @@ const EditButton = (props: {
   const [hovering, setHovering] = useState<boolean>(false);
 
   return (
-    <button onClick={() => props.on_click()}>
+    <button onClick={async (e) => await props.on_click(e)}>
       <Image 
         src={hovering ? "/icons/edit-fill.svg" : "/icons/edit.svg"}
         alt="Edit"

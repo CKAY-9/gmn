@@ -1,0 +1,30 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+
+  .splash {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: contain;
+  }
+
+  .username {
+    font-size: 3rem;
+    font-weight: 900;
+  }
+
+  .edit {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

@@ -41,6 +41,9 @@ const IndexPage = async () => {
             </>
           ) : (
             <>
+              <h1>Welcome back, {user.username}</h1>
+              <div>// TODO: show goals</div>
+              <div>// TODO: show notifications</div>
             </>
           )}
         </div>

@@ -66,6 +66,16 @@ h1, h2, h3, h4 {
   margin: 0;
 }
 
+.subject {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--secondary);
+  box-shadow: var(--shdw1);
+  border-radius: 0.5rem;
+}
+
 .app_container {
   min-height: 100vh;
   display: flex;
