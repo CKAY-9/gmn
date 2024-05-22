@@ -1,4 +1,7 @@
+"use client"
+
 import { UserDTO } from "@/api/user/user.dto"
+import Macros from "@/components/macros/macros"
 
 const FitnessClient = (props: {
   user: UserDTO
@@ -6,8 +9,7 @@ const FitnessClient = (props: {
   return (
     <>
       <div className="subject">
-        <h2>Macros</h2>
-        
+        <Macros user={props.user} />
       </div>
     </>
   );

@@ -86,3 +86,29 @@ pub struct NewExercise {
     pub example_video: String,
     pub journal_entries: Vec<i32>
 }
+
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
+#[diesel(table_name = crate::schema::macros)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct Macros {
+    pub id: i32,
+    pub user_id: i32,
+    pub date: String,
+    pub calories: i32,
+    pub protein: i32,
+    pub carbs: i32,
+    pub fats: i32,
+    pub entries: Vec<String>
+}
+
+#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone)]
+#[diesel(table_name = crate::schema::macros)]
+pub struct NewMacros {
+    pub user_id: i32,
+    pub date: String,
+    pub calories: i32,
+    pub protein: i32,
+    pub carbs: i32,
+    pub fats: i32,
+    pub entries: Vec<String>
+}

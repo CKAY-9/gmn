@@ -21,6 +21,7 @@ body {
   background-color: var(--background);
   color: var(--text);
   margin: 0; padding: 0;
+  overflow: hidden;
 }
 
 a {
@@ -41,6 +42,7 @@ input, textarea {
   padding: 0 0.5rem;
   box-shadow: var(--shdw1);
   transition: 0.35s ease all;
+  width: fit-content;
 
   &:focus, &:active {
     outline: none;
@@ -48,7 +50,7 @@ input, textarea {
   }
 }
 
-button {
+button, input[type="submit"] {
   background-color: transparent;
   border: none;
 
@@ -92,12 +94,14 @@ h1, h2, h3, h4 {
 }
 
 .app_container {
+  max-height: 100vh;
   min-height: 100vh;
   display: flex;
   flex-direction: row;
 
   .content{ 
+    overflow: auto;
     flex: 1;
-    margin: 5rem;
+    padding: 5rem;
   }
 }

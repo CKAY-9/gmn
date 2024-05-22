@@ -1,5 +1,5 @@
 use actix_web::web;
-use gmn_api_routes::user::{get::{get_user, login_with_discord}, put::{update_personal_reconds, update_user}};
+use gmn_api_routes::{macros::{get::get_macros, put::update_entries}, user::{get::{get_user, login_with_discord}, put::{update_personal_reconds, update_user}}};
 
 pub fn configure_api(cfg: &mut web::ServiceConfig) {
     cfg.service(
@@ -7,7 +7,8 @@ pub fn configure_api(cfg: &mut web::ServiceConfig) {
             .configure(config_user)
             .configure(config_usergroups)
             .configure(config_exercises) 
-            .configure(config_journal)  
+            .configure(config_journal) 
+            .configure(config_macros) 
     );
 }
 
@@ -39,5 +40,13 @@ pub fn config_journal(cfg: &mut web::ServiceConfig) {
 pub fn config_usergroups(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/usergroup")
+    );
+}
+
+pub fn config_macros(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/macros")
+            .service(get_macros)
+            .service(update_entries)
     );
 }

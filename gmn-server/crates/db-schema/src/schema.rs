@@ -21,6 +21,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    macros (id) {
+        id -> Int4,
+        user_id -> Int4,
+        date -> Text,
+        calories -> Int4,
+        protein -> Int4,
+        carbs -> Int4,
+        fats -> Int4,
+        entries -> Array<Text>,
+    }
+}
+
+diesel::table! {
     usergroups (id) {
         id -> Int4,
         name -> Text,
@@ -46,6 +59,7 @@ diesel::table! {
 diesel::allow_tables_to_appear_in_same_query!(
     exercises,
     journals,
+    macros,
     usergroups,
     users,
 );

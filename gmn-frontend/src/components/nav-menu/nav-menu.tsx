@@ -15,7 +15,7 @@ const NavMenu = (props: {
 	const [path, setPath] = useState<string[]>(["", "", ""]);
 
 	useEffect(() => {
-		if (typeof(window) === undefined || typeof(document) === undefined) return;
+		if (typeof (window) === undefined || typeof (document) === undefined) return;
 
 		const link = window.location.pathname;
 		const paths = link.split("/");
@@ -27,7 +27,7 @@ const NavMenu = (props: {
 			<h1 style={{ "textAlign": "center" }}>GMN</h1>
 			<div className={style.container}>
 				<section className={style.nav}>
-					<Link href="/" style={{"opacity": path[1] === "" ? "1" : "0.5"}}>
+					<Link href="/" style={{ "opacity": path[1] === "" ? "1" : "0.5" }}>
 						<Image
 							src="/icons/home.svg"
 							alt="Home"
@@ -37,15 +37,15 @@ const NavMenu = (props: {
 						/>
 						<span>Home</span>
 					</Link>
-					<Link href="/feed" style={{"opacity": path[1] === "feed" ? "1" : "0.5"}}>
+					<Link href="/explore" style={{ "opacity": path[1] === "explore" ? "1" : "0.5" }}>
 						<Image
-							src="/icons/trending.svg"
-							alt="Feed"
+							src="/icons/explore.svg"
+							alt="Explore"
 							sizes="100%"
 							width={0}
 							height={0}
 						/>
-						<span>Feed</span>
+						<span>Explore</span>
 					</Link>
 					{props.user === null ? (
 						<>
@@ -53,7 +53,17 @@ const NavMenu = (props: {
 						</>
 					) : (
 						<>
-							<Link href="/fitness" style={{"opacity": path[1] === "fitness" ? "1" : "0.5"}}>
+							<Link href="/feed" style={{ "opacity": path[1] === "feed" ? "1" : "0.5" }}>
+								<Image
+									src="/icons/trending.svg"
+									alt="Feed"
+									sizes="100%"
+									width={0}
+									height={0}
+								/>
+								<span>Feed</span>
+							</Link>
+							<Link href="/fitness" style={{ "opacity": path[1] === "fitness" ? "1" : "0.5" }}>
 								<Image
 									src="/icons/fitness.svg"
 									alt="Fitness"

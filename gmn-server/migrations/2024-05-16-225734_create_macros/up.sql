@@ -1,0 +1,10 @@
+CREATE TABLE macros (
+  id SERIAL NOT NULL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  calories INTEGER NOT NULL,
+  protein INTEGER NOT NULL,
+  carbs INTEGER NOT NULL,
+  fats INTEGER NOT NULL,
+  entries TEXT[] NOT NULL
+);

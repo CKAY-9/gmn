@@ -1,4 +1,5 @@
 import { getUserFromToken } from "@/api/user/user.api";
+import Feed from "@/components/feed/feed";
 import NavMenu from "@/components/nav-menu/nav-menu";
 import { getStoredToken } from "@/utils/token";
 import { Metadata } from "next";
@@ -18,7 +19,7 @@ const FeedPage = async () => {
             <main className="app_container">
                 <NavMenu user={user} />
                 <div className="content">
-                    
+                    <Feed user={user} />
                 </div>
             </main>
         </>

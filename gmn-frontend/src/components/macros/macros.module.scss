@@ -1,0 +1,27 @@
+.entries_container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 450px));
+  gap: 1rem;
+}
+
+.add {
+  width: fit-content;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+    filter: invert(1);
+  }
+}
+
+.edit {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
