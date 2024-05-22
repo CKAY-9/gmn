@@ -5,7 +5,9 @@ CREATE TABLE users (
     username TEXT NOT NULL,
     avatar TEXT NOT NULL,
     bio TEXT NOT NULL,
+    date TEXT NOT NULL,
     personal_records INTEGER[] NOT NULL,
-    journal_entries INTEGER[] NOT NULL,
-    usergroups INTEGER[] NOT NULL
+    usergroups INTEGER[] NOT NULL,
+    followers INTEGER[] NOT NULL,
+    following INTEGER[] NOT NULL
 );

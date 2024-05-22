@@ -6,17 +6,6 @@ diesel::table! {
         name -> Text,
         description -> Text,
         example_video -> Text,
-        journal_entries -> Array<Int4>,
-    }
-}
-
-diesel::table! {
-    journals (id) {
-        id -> Int4,
-        user_id -> Int4,
-        posted -> Text,
-        exercises -> Array<Text>,
-        description -> Text,
     }
 }
 
@@ -30,6 +19,17 @@ diesel::table! {
         carbs -> Int4,
         fats -> Int4,
         entries -> Array<Text>,
+    }
+}
+
+diesel::table! {
+    posts (id) {
+        id -> Int4,
+        title -> Text,
+        description -> Text,
+        date -> Text,
+        files -> Array<Text>,
+        user_id -> Int4,
     }
 }
 
@@ -50,16 +50,30 @@ diesel::table! {
         username -> Text,
         avatar -> Text,
         bio -> Text,
+        date -> Text,
         personal_records -> Array<Int4>,
-        journal_entries -> Array<Int4>,
         usergroups -> Array<Int4>,
+        followers -> Array<Int4>,
+        following -> Array<Int4>,
+    }
+}
+
+diesel::table! {
+    workouts (id) {
+        id -> Int4,
+        user_id -> Int4,
+        date -> Text,
+        title -> Text,
+        description -> Text,
+        exercises -> Array<Text>,
     }
 }
 
 diesel::allow_tables_to_appear_in_same_query!(
     exercises,
-    journals,
     macros,
+    posts,
     usergroups,
     users,
+    workouts,
 );

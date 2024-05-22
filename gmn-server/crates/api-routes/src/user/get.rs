@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 use super::dto::{DiscordInitialDTO, DiscordUserDTO, GetUserDTO, UserOAuthDTO};
 use crate::dto::Message;
 use actix_web::{
@@ -10,7 +12,7 @@ use gmn_db::crud::user::{
     create_user, get_user_from_id, get_user_from_oauth, get_user_from_token, update_user_from_id,
 };
 use gmn_db_schema::models::{NewUser, User};
-use gmn_utils::{extract_header_value, get_env_var, get_local_api_url};
+use gmn_utils::{extract_header_value, get_env_var, get_local_api_url, iso8601};
 use rand::Rng;
 use sha2::{Digest, Sha256};
 
@@ -95,9 +97,11 @@ pub async fn login_with_discord(
         ),
         token: user_token.clone(),
         bio: "No bio provided.".to_string(),
+        date: iso8601(&SystemTime::now()),
         usergroups: vec![],
-        journal_entries: vec![],
         personal_records: vec![],
+        followers: vec![],
+        following: vec![]
     };
     let _insert: Option<User> = create_user(new_user);
     Ok(Redirect::to(format!(

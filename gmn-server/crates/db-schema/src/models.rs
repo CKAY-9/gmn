@@ -11,9 +11,11 @@ pub struct User {
     pub username: String,
     pub avatar: String,
     pub bio: String,
+    pub date: String,
     pub personal_records: Vec<i32>,
-    pub journal_entries: Vec<i32>,
-    pub usergroups: Vec<i32>
+    pub usergroups: Vec<i32>,
+    pub followers: Vec<i32>,
+    pub following: Vec<i32>
 }
 
 #[derive(Insertable, AsChangeset, Deserialize, Serialize)]
@@ -24,9 +26,11 @@ pub struct NewUser {
     pub username: String,
     pub avatar: String,
     pub bio: String,
+    pub date: String,
     pub personal_records: Vec<i32>,
-    pub journal_entries: Vec<i32>,
-    pub usergroups: Vec<i32>
+    pub usergroups: Vec<i32>,
+    pub followers: Vec<i32>,
+    pub following: Vec<i32>
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
@@ -48,23 +52,25 @@ pub struct NewUsergroup {
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
-#[diesel(table_name = crate::schema::journals)]
+#[diesel(table_name = crate::schema::workouts)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
-pub struct Journal {
+pub struct Workout {
     pub id: i32,
     pub user_id: i32,
-    pub posted: String,
+    pub date: String,
+    pub title: String,
+    pub description: String,
     pub exercises: Vec<String>,
-    pub description: String
 }
 
 #[derive(Insertable, AsChangeset, Deserialize, Serialize)]
-#[diesel(table_name = crate::schema::journals)]
-pub struct NewJournal {
+#[diesel(table_name = crate::schema::workouts)]
+pub struct NewWorkout {
     pub user_id: i32,
-    pub posted: String,
+    pub date: String,
+    pub title: String,
+    pub description: String,
     pub exercises: Vec<String>,
-    pub description: String
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
@@ -74,8 +80,7 @@ pub struct Exercise {
     pub id: i32,
     pub name: String,
     pub description: String,
-    pub example_video: String,
-    pub journal_entries: Vec<i32>
+    pub example_video: String
 }
 
 #[derive(Insertable, AsChangeset, Deserialize, Serialize)]
@@ -84,7 +89,6 @@ pub struct NewExercise {
     pub name: String,
     pub description: String,
     pub example_video: String,
-    pub journal_entries: Vec<i32>
 }
 
 #[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
@@ -111,4 +115,26 @@ pub struct NewMacros {
     pub carbs: i32,
     pub fats: i32,
     pub entries: Vec<String>
+}
+
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
+#[diesel(table_name = crate::schema::posts)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct Post {
+    pub id: i32,
+    pub title: String,
+    pub description: String,
+    pub date: String,
+    pub files: Vec<String>,
+    pub user_id: i32
+}
+
+#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone)]
+#[diesel(table_name = crate::schema::posts)]
+pub struct NewPost {
+    pub title: String,
+    pub description: String,
+    pub date: String,
+    pub files: Vec<String>,
+    pub user_id: i32
 }
