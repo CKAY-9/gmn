@@ -1,6 +1,7 @@
 .oauths {
   margin-top: 1rem;
   display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
   gap: 0.5rem;
 
   .oauth {
@@ -11,6 +12,7 @@
     border-radius: 1rem;
     width: fit-content;
     color: white;
+    box-shadow: var(--shdw1);
 
     &:hover {
       text-decoration: none;

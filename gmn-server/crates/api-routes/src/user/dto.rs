@@ -34,3 +34,17 @@ pub struct UpdateRecordsDTO {
 pub struct UpdateUserDTO {
     pub bio: String
 }
+
+#[derive(Deserialize)]
+pub struct GithubInitialDTO {
+    pub access_token: String,
+    pub token_type: String,
+    pub scope: String,
+}
+
+#[derive(Deserialize)]
+pub struct GithubUserDTO {
+    pub login: String,
+    pub avatar_url: String,
+    pub id: u64,
+}

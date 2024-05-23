@@ -2,7 +2,6 @@
 
 import { UserDTO } from "@/api/user/user.dto"
 import style from "./user.module.scss";
-import Image from "next/image";
 import PersonalRecords from "@/components/personal-records/personal-records";
 import ProfileHeader from "@/components/profile-header/profile-header";
 import ProfileWorkouts from "@/components/profile-workouts/profile-workouts";

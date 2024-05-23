@@ -1,0 +1,12 @@
+.welcome_splash {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+
+  .pfp {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+  }
+}

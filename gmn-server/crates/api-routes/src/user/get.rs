@@ -1,6 +1,8 @@
 use std::time::SystemTime;
 
-use super::dto::{DiscordInitialDTO, DiscordUserDTO, GetUserDTO, UserOAuthDTO};
+use super::dto::{
+    DiscordInitialDTO, DiscordUserDTO, GetUserDTO, GithubInitialDTO, GithubUserDTO, UserOAuthDTO,
+};
 use crate::dto::Message;
 use actix_web::{
     get,
@@ -39,10 +41,7 @@ pub async fn login_with_discord(
         .get("https://discord.com/api/v10/users/@me")
         .header(
             "authorization",
-            format!(
-                "Bearer {}",
-                inital_response_parsed.access_token
-            ),
+            format!("Bearer {}", inital_response_parsed.access_token),
         )
         .send()
         .await?;
@@ -101,7 +100,7 @@ pub async fn login_with_discord(
         usergroups: vec![],
         personal_records: vec![],
         followers: vec![],
-        following: vec![]
+        following: vec![],
     };
     let _insert: Option<User> = create_user(new_user);
     Ok(Redirect::to(format!(
@@ -110,6 +109,95 @@ pub async fn login_with_discord(
         user_token
     ))
     .permanent())
+}
+
+#[get("/github")]
+pub async fn login_with_github(
+    query: web::Query<UserOAuthDTO>,
+) -> Result<Redirect, Box<dyn std::error::Error>> {
+    let client = reqwest::Client::new();
+    let initial_token_response = client
+        .post("https://github.com/login/oauth/access_token")
+        .form(&[
+            ("code", query.code.to_owned()),
+            ("client_id", get_env_var("GITHUB_OAUTH_ID")),
+            ("client_secret", get_env_var("GITHUB_OAUTH_SECRET")),
+        ])
+        .header("accept", "application/json")
+        .send()
+        .await?;
+    let initial_response_parsed: GithubInitialDTO =
+        serde_json::from_str::<GithubInitialDTO>(initial_token_response.text().await?.as_str())?;
+    let user_response = client
+        .get("https://api.github.com/user")
+        .header(
+            "authorization",
+            format!(
+                "{} {}",
+                initial_response_parsed.token_type, initial_response_parsed.access_token
+            ),
+        )
+        .header("accept", "application/vnd.github+json")
+        .header("user-agent", "request")
+        .send()
+        .await?;
+    if user_response.status() != 200 {
+        return Ok(Redirect::to(format!(
+            "{}/login?msg=ue",
+            get_env_var("FRONTEND_URL")
+        ))
+        .permanent());
+    }
+    let user_response_parsed: GithubUserDTO =
+        serde_json::from_str::<GithubUserDTO>(user_response.text().await?.as_str())?;
+    let oauth = format!("github-{}", user_response_parsed.id);
+    let user: Option<User> = get_user_from_oauth(oauth.clone());
+
+    if user.is_some() {
+        let mut user_unwrap = user.unwrap();
+        user_unwrap.avatar = user_response_parsed.avatar_url.clone();
+        user_unwrap.username = user_response_parsed.login;
+        let update: NewUser =
+            serde_json::from_str(serde_json::to_string(&user_unwrap).unwrap().as_str()).unwrap();
+        let _ = update_user_from_id(user_unwrap.id, update);
+
+        return Ok(Redirect::to(format!(
+            "{}/login?token={}",
+            get_env_var("FRONTEND_URL"),
+            user_unwrap.token
+        )));
+    }
+
+    let mut rng = rand::thread_rng();
+    let random_number: f64 = rng.gen();
+    let mut hasher = Sha256::new();
+    hasher.update(
+        format!(
+            "{}{}",
+            user_response_parsed.id,
+            random_number * 2_000_000_000f64
+        )
+        .into_bytes(),
+    );
+    let user_token: String = format!("{:X}", hasher.finalize()).to_string();
+    let new_user = NewUser {
+        username: user_response_parsed.login.clone(),
+        oauth_id: oauth,
+        avatar: user_response_parsed.avatar_url.clone(),
+        token: user_token.clone(),
+        bio: "No bio provided.".to_string(),
+        date: iso8601(&SystemTime::now()),
+        usergroups: vec![],
+        personal_records: vec![],
+        followers: vec![],
+        following: vec![],
+    };
+    let _insert = create_user(new_user);
+    Ok(Redirect::to(format!(
+        "{}/login?token={}",
+        get_env_var("FRONTEND_URL"),
+        user_token
+    )))
 }
 
 #[get("")]

@@ -6,6 +6,8 @@ import Image from "next/image";
 import EditButton from "../edit-button/edit-button";
 import { BaseSyntheticEvent, useState } from "react";
 import { updateUserFromID } from "@/api/user/user.api";
+import Logout from "../logout-button/logout";
+import Follow from "../follow-button/follow-button";
 
 const ProfileHeader = (props: {
   profile: UserDTO,
@@ -48,6 +50,15 @@ const ProfileHeader = (props: {
           </>
         )}
       </section>
+      {!is_self ? (
+        <section>
+          <Follow user={props.user} profile={props.profile} />
+        </section>
+      ) : (
+        <section>
+          <Logout />
+        </section>
+      )}
       {is_self &&
         <div className={style.edit}>
           <EditButton on_click={toggleEditMode} />

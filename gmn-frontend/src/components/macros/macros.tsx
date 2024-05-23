@@ -62,7 +62,8 @@ const Entry = (props: {
 
 const FoodEntries = (props: {
   user: UserDTO,
-  macros: MacrosDTO
+  macros: MacrosDTO,
+  add_new_entry: Function
 }) => {
   const [raw_entries, setRawEntries] = useState<string[]>(props.macros.entries || []);
   const [entries, setEntries] = useState<EntriesDTO[]>([]);
@@ -84,7 +85,7 @@ const FoodEntries = (props: {
 
   const updateEntries = async (index: number, name: string, cals: number, pro: number, fats: number, carbs: number) => {
     if (entries[index] === undefined || entries[index] === null) return;
-    console.log("thanks typescript: " + typeof(cals));
+
     entries[index].calories = cals;
     entries[index].carbs = carbs;
     entries[index].fats = fats;
@@ -92,6 +93,7 @@ const FoodEntries = (props: {
     entries[index].name = name;
     setEntries(entries);
     const u = await updateMacroEntriesFromMacroID(props.macros.id, convertObjectFoodEntriesToStringEntries(entries));
+    props.add_new_entry(entries);
   }
 
   return (
@@ -104,11 +106,12 @@ const FoodEntries = (props: {
           width={0}
           height={0}
         />
+        <span>Add Item</span>
       </button>
       <div className={style.entries}>
         {entries.map((entry, index) => {
           return (
-            <Entry index={index} update_entry={updateEntries} remove_entry={(e: BaseSyntheticEvent) => {e.preventDefault()}} entry={entry} key={index} />
+            <Entry index={index} update_entry={updateEntries} remove_entry={(e: BaseSyntheticEvent) => { e.preventDefault() }} entry={entry} key={index} />
           );
         })}
       </div>
@@ -120,15 +123,48 @@ const Macros = (props: {
   user: UserDTO
 }) => {
   const [today_macros, setTodayMacros] = useState<MacrosDTO | null>(null);
+  const [calories, setCalories] = useState<number>(0);
+  const [fats, setFats] = useState<number>(0);
+  const [protein, setProtein] = useState<number>(0);
+  const [carbs, setCarbs] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
       const macro = await getMacrosFromUserID(props.user.id);
       setTodayMacros(macro);
+      if (macro !== null) {
+        setCalories(macro.calories);
+        setFats(macro.fats);
+        setProtein(macro.protein);
+        setCarbs(macro.carbs);
+      }
+
       setLoading(false);
     })();
   }, [props.user.id]);
+
+  const addedNewFoodEntry = (entries: EntriesDTO[]) => {
+    if (today_macros === null) return;
+
+    let cals = 0;
+    let carbs = 0;
+    let protein = 0;
+    let fats = 0;
+
+    for (let i = 0; i < entries.length; i++) {
+      cals += Number.parseInt(entries[i].calories.toString());
+      carbs += Number.parseInt(entries[i].carbs.toString());
+      protein += Number.parseInt(entries[i].protein.toString());
+      fats += Number.parseInt(entries[i].fats.toString());
+    }
+
+    setCalories(cals);
+    setCarbs(carbs);
+    setProtein(protein);
+    setFats(fats);
+  }
+
   return (
     <>
       <h2>Macros</h2>
@@ -140,11 +176,11 @@ const Macros = (props: {
             <span>Failed to get macros data. This is most likely an issue on our end and not yours.</span>
           ) : (
             <>
-              <span>Calories: {today_macros.calories}kcal</span>
-              <span>Protein: {today_macros.protein}g</span>
-              <span>Carbs: {today_macros.carbs}g</span>
-              <span>Fats: {today_macros.fats}g</span>
-              <FoodEntries macros={today_macros} user={props.user} />
+              <span>Calories: {calories}kcal</span>
+              <span>Protein: {protein}g</span>
+              <span>Carbs: {carbs}g</span>
+              <span>Fats: {fats}g</span>
+              <FoodEntries add_new_entry={addedNewFoodEntry} macros={today_macros} user={props.user} />
             </>
           )}
         </>
