@@ -39,6 +39,7 @@ pub async fn new_post(
         title: data.title.clone(),
         description: data.description.clone(),
         date: iso8601(&SystemTime::now()),
+        likes: vec![],
         files: data.files.clone(),
         user_id: user.id
     };

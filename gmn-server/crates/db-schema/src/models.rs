@@ -125,6 +125,7 @@ pub struct Post {
     pub title: String,
     pub description: String,
     pub date: String,
+    pub likes: Vec<i32>,
     pub files: Vec<String>,
     pub user_id: i32
 }
@@ -135,6 +136,7 @@ pub struct NewPost {
     pub title: String,
     pub description: String,
     pub date: String,
+    pub likes: Vec<i32>,
     pub files: Vec<String>,
     pub user_id: i32
 }

@@ -28,6 +28,7 @@ diesel::table! {
         title -> Text,
         description -> Text,
         date -> Text,
+        likes -> Array<Int4>,
         files -> Array<Text>,
         user_id -> Int4,
     }

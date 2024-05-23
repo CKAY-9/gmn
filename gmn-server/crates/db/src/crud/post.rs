@@ -16,10 +16,10 @@ pub fn create_post(new_post: NewPost) -> Option<Post> {
     }
 }
 
-pub fn get_post_from_id(posts_id: i32) -> Option<Post> {
+pub fn get_post_from_id(post_id: i32) -> Option<Post> {
     let connection = &mut create_connection();
     let find: QueryResult<Post> = posts::table
-        .filter(posts::id.eq(posts_id))
+        .filter(posts::id.eq(post_id))
         .first::<Post>(connection);
 
     match find {
@@ -28,7 +28,7 @@ pub fn get_post_from_id(posts_id: i32) -> Option<Post> {
     }
 }
 
-pub fn get_post_from_user_id(user_id: i32) -> Vec<Post> {
+pub fn get_posts_from_user_id(user_id: i32) -> Vec<Post> {
     let connection = &mut create_connection();
     let find = posts::table.filter(posts::user_id.eq(user_id)).load(connection);
 

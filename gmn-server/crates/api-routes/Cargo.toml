@@ -22,3 +22,4 @@ gmn_db = { workspace = true }
 rand = { workspace = true }
 iso8601 = { workspace = true }
 chrono = { workspace = true }
+diesel = { workspace = true }

@@ -12,7 +12,7 @@ pub fn configure_api(cfg: &mut web::ServiceConfig) {
             .configure(config_user)
             .configure(config_usergroups)
             .configure(config_exercises)
-            .configure(config_journal)
+            .configure(config_posts)
             .configure(config_macros)
     );
 }
@@ -47,10 +47,6 @@ pub fn config_posts(cfg: &mut web::ServiceConfig) {
 
 pub fn config_exercises(cfg: &mut web::ServiceConfig) {
     cfg.service(web::scope("/exercise"));
-}
-
-pub fn config_journal(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/journal"));
 }
 
 pub fn config_usergroups(cfg: &mut web::ServiceConfig) {

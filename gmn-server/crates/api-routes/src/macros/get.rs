@@ -1,6 +1,6 @@
 use std::time::SystemTime;
 
-use super::{dto::GetMacrosDTO, get_macros_from_date};
+use super::{dto::GetMacrosDTO, helpers::get_macros_from_date};
 use crate::dto::Message;
 use actix_web::{get, http::StatusCode, web, HttpResponse, Responder};
 use gmn_db::crud::{macros::get_macros_from_user_id, user::get_user_from_id};
