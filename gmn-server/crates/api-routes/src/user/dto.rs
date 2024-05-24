@@ -19,8 +19,13 @@ pub struct DiscordUserDTO {
 }
 
 #[derive(Deserialize)]
-pub struct GetUserDTO {
+pub struct GetUserOptionDTO {
     pub user_id: Option<i32>
+}
+
+#[derive(Deserialize, Debug)]
+pub struct GetUserDTO {
+    pub user_id: i32
 }
 
 #[derive(Deserialize)]

@@ -78,3 +78,22 @@ export const updateUserFromID = async (user_id: number, bio: string): Promise<Us
 		return null;
 	}
 }
+
+export const followUserFromID = async (profile_id: number): Promise<boolean> => {
+	try {
+		const request = await axios({
+			url: API_URL + "/user/follow",
+			method: "POST",
+			data: {
+				user_id: profile_id
+			},
+			headers: {
+				Authorization: getCookie("token") || ""
+			}
+		});
+		return true;
+	} catch (ex) {
+		console.log(ex);
+		return false;
+	}
+}

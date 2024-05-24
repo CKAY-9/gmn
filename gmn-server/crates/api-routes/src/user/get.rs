@@ -1,7 +1,7 @@
 use std::time::SystemTime;
 
 use super::dto::{
-    DiscordInitialDTO, DiscordUserDTO, GetUserDTO, GithubInitialDTO, GithubUserDTO, UserOAuthDTO,
+    DiscordInitialDTO, DiscordUserDTO, GetUserOptionDTO, GithubInitialDTO, GithubUserDTO, UserOAuthDTO,
 };
 use crate::dto::Message;
 use actix_web::{
@@ -203,7 +203,7 @@ pub async fn login_with_github(
 #[get("")]
 pub async fn get_user(
     request: HttpRequest,
-    query: web::Query<GetUserDTO>,
+    query: web::Query<GetUserOptionDTO>,
 ) -> Result<impl Responder, Box<dyn std::error::Error>> {
     let id: Option<i32> = query.user_id;
     match id {

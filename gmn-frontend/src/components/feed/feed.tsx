@@ -3,20 +3,11 @@
 import { UserDTO } from "@/api/user/user.dto";
 import style from "./feed.module.scss";
 import Link from "next/link";
-import { BaseSyntheticEvent, useEffect, useState } from "react";
-import { createNewFeedPost, getFeedPosts } from "@/api/feed/feed.api";
+import { useEffect, useState } from "react";
+import { getFeedPosts } from "@/api/feed/feed.api";
 import { PostDTO } from "@/api/feed/feed.dto";
 import NewPost from "./new-post";
-
-const FeedPost = (props: {
-  post: PostDTO,
-  user: UserDTO | null
-}) => {
-  return (
-    <>
-    </>
-  );
-}
+import FeedPost from "./feed-post";
 
 const Feed = (props: {
   user: UserDTO | null
@@ -29,11 +20,10 @@ const Feed = (props: {
     (async () => {
       const feed_posts = await getFeedPosts();
       setPosts(feed_posts);
-      if (initial_load) {
-        setInitialLoad(false);
-      }
+      setInitialLoad(false);
+      setLoading(false);
     })();
-  }, [initial_load])
+  }, [])
 
   if (props.user === null) {
     return (
@@ -61,8 +51,9 @@ const Feed = (props: {
           </div>
         ) : (
           <>
+            <NewPost user={props.user} />
             {posts.map((post, index) => {
-              return (<FeedPost post={post} user={props.user} key={index}></FeedPost>);
+              return (<FeedPost post={post} user={props.user} key={index} />);
             })}
             {loading && (
               <>
@@ -70,7 +61,6 @@ const Feed = (props: {
             )}
           </>
         )}
-        <NewPost user={props.user} />
       </div>
     </>
   );

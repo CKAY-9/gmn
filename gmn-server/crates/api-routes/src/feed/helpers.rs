@@ -76,8 +76,8 @@ fn calculate_weight_bias_for_post(weight: &FeedWeight) -> f32 {
         0.05f32
     );
 
-    let _today = iso8601::date(iso8601(&SystemTime::now()).as_str()).unwrap();
-    let _date_to_iso = iso8601::date(&post.date).unwrap();
+    //let _today = iso8601::date(iso8601(&SystemTime::now()).as_str()).unwrap();
+    //let _date_to_iso = iso8601::date(&post.date).unwrap();
     // TODO: determine date weights
 
     bias
@@ -120,11 +120,12 @@ fn get_users_from_weighting(user: &User) -> Vec<i32> {
     let max_user_selection = 15;
     for _ in 0..max_user_selection {
         let rand: f32 = rng.gen();
-        let mut flag = false; // used to just get random, unbiased users if check fails
+        let mut flag = false;
         for u in combined_users.iter_mut() {
             if u.weight >= rand {
                 final_users.push(u.id.clone());
                 flag = true;
+                break;
             }
         }
 
@@ -159,11 +160,12 @@ fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
     let max_post_selection = 15;
     for _ in 0..max_post_selection {
         let rand: f32 = rng.gen();
-        let mut flag = false; // used to just get random, unbiased users if check fails
+        let mut flag = false;
         for p in initial_biases.iter_mut() {
             if p.weight >= rand {
                 final_posts.push(p.id.to_owned());
                 flag = true;
+                break;
             }
         }
 
@@ -179,8 +181,9 @@ fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
 }
 
 pub fn get_user_specific_feed_posts(user: &User) -> Vec<Post> {
+    // TODO: get users and posts 
     let users = get_users_from_weighting(user);
-    let posts: Vec<i32> = get_posts_from_weighting(users);
+    let posts: Vec<i32> = get_posts_from_weighting(users.clone());
 
     let mut fetched_posts: Vec<Post> = Vec::new();
     for p in posts.iter() {

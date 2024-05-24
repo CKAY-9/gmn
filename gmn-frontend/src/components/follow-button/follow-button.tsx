@@ -1,6 +1,8 @@
 "use client"
 
+import { followUserFromID } from "@/api/user/user.api"
 import { UserDTO } from "@/api/user/user.dto"
+import Link from "next/link"
 import { BaseSyntheticEvent, useState } from "react"
 
 const Follow = (props: {
@@ -11,17 +13,19 @@ const Follow = (props: {
 
   if (props.user === null) {
     return (
-      <span>Must be logged in to follow.</span>
+      <Link href="/login">Login in to follow.</Link>
     );
   }
 
   const toggleFollow = async (e: BaseSyntheticEvent) => {
-
+    e.preventDefault();
+    const follow = await followUserFromID(props.profile.id);
+    setIsFollowing(follow);
   }
 
   return (
     <>
-      <button onClick={toggleFollow} className="impact">Follow</button>
+      <button onClick={toggleFollow} className={`impact ${is_following ? "danger" : ""}`}>{is_following ? "Unfollow" : "Follow"}</button>
     </>
   );
 }

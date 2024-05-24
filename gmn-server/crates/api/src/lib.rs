@@ -2,7 +2,7 @@ use actix_web::web;
 use gmn_api_routes::{
     feed::{ get::{get_explore_posts, get_feed_posts, get_post}, post::new_post },
     macros::{ get::get_macros, put::update_entries },
-    user::{ get::{ get_user, login_with_discord, login_with_github }, put::{ update_personal_reconds, update_user } },
+    user::{ get::{ get_user, login_with_discord, login_with_github }, post::follow_or_unfollower_user, put::{ update_personal_reconds, update_user } },
 };
 
 pub fn configure_api(cfg: &mut web::ServiceConfig) {
@@ -24,6 +24,7 @@ pub fn config_user(cfg: &mut web::ServiceConfig) {
             .service(get_user)
             .service(update_user)
             .service(update_personal_reconds)
+            .service(follow_or_unfollower_user)
             .service(web
                 ::scope("/auth")
                 .service(login_with_discord)
