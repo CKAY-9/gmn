@@ -8,6 +8,7 @@ import { getFeedPosts } from "@/api/feed/feed.api";
 import { PostDTO } from "@/api/feed/feed.dto";
 import NewPost from "./new-post";
 import FeedPost from "./feed-post";
+import LoadingWheel from "../loading/loading";
 
 const Feed = (props: {
   user: UserDTO | null
@@ -37,6 +38,7 @@ const Feed = (props: {
   if (initial_load) {
     return (
       <>
+        <LoadingWheel size_in_rems={5} />
       </>
     )
   }
@@ -52,9 +54,11 @@ const Feed = (props: {
         ) : (
           <>
             <NewPost user={props.user} />
-            {posts.map((post, index) => {
-              return (<FeedPost post={post} user={props.user} key={index} />);
-            })}
+            <div className={style.posts}>
+              {posts.map((post, index) => {
+                return (<FeedPost post={post} user={props.user} key={index} />);
+              })}
+            </div>
             {loading && (
               <>
               </>

@@ -18,7 +18,10 @@ const ExplorePage = async () => {
       <main className="app_container">
         <NavMenu user={user} />
         <div className="content">
-          
+          <div className="subject">
+            <h1>Explore</h1>
+            <span>// TODO: make explore page</span>
+          </div>
         </div>
       </main>
     </>

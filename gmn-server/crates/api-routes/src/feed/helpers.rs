@@ -1,16 +1,9 @@
-use std::time::SystemTime;
+use std::{collections::HashMap, time::SystemTime};
 
 use gmn_db::crud::{ post::{ get_post_from_id, get_posts_from_user_id }, user::get_user_from_id };
 use gmn_db_schema::models::{ Post, User };
 use gmn_utils::iso8601;
-use rand::{ seq::IteratorRandom, Rng };
-use serde::{ Deserialize, Serialize };
-
-#[derive(Serialize, Deserialize, Clone, Copy)]
-pub struct FeedWeight {
-    id: i32,
-    weight: f32,
-}
+use rand::Rng;
 
 fn convert_factor_to_weight_bias(value: f32, max: f32, wght: f32) -> f32 {
     let mut val: f32 = value;
@@ -22,28 +15,28 @@ fn convert_factor_to_weight_bias(value: f32, max: f32, wght: f32) -> f32 {
     bias
 }
 
-fn calculate_weight_bias_for_user(weight: &FeedWeight) -> f32 {
-    let user_option = get_user_from_id(weight.id);
+fn calculate_weight_bias_for_user(id: i32) -> f32 {
+    let user_option = get_user_from_id(id);
     if user_option.is_none() {
         return 0f32;
     }
 
     let follower_count_bias = 0.1f32;
-    let post_count_bias = 0.05f32;
-    let today_posts_bias = 0.05f32;
+    let post_count_bias = 0.1f32;
+    let today_posts_bias = 0.1f32;
 
     let user = user_option.unwrap();
-    let posts = get_posts_from_user_id(weight.id);
+    let posts = get_posts_from_user_id(id);
     let followers = user.followers;
 
     let mut bias: f32 = 0f32;
-    bias += convert_factor_to_weight_bias(followers.len() as f32, 100_000f32, follower_count_bias);
-    bias += convert_factor_to_weight_bias(posts.len() as f32, 1_000f32, post_count_bias);
+    bias += convert_factor_to_weight_bias(followers.len() as f32, 10f32, follower_count_bias);
+    bias += convert_factor_to_weight_bias(posts.len() as f32, 10f32, post_count_bias);
 
     let mut today_post_count = 0;
     let today = iso8601::date(iso8601(&SystemTime::now()).as_str()).unwrap();
     for post in posts.iter() {
-        let temp_date = post.date.clone();
+        let temp_date = &post.date;
         let date_to_iso = iso8601::date(&temp_date);
         if date_to_iso.is_ok() {
             let d = date_to_iso.unwrap();
@@ -57,23 +50,17 @@ fn calculate_weight_bias_for_user(weight: &FeedWeight) -> f32 {
     bias
 }
 
-fn calculate_weight_bias_for_post(weight: &FeedWeight) -> f32 {
+fn calculate_weight_bias_for_post(post: Post) -> f32 {
     let mut bias = 0f32;
-    let post_option = get_post_from_id(weight.id);
-    if post_option.is_none() {
-        return 0f32;
-    }
-
-    let post = post_option.unwrap();
     let likes = post.likes;
     let description = post.description;
     let title = post.title;
 
-    bias += convert_factor_to_weight_bias(likes.len() as f32, 1_000f32, 0.05f32);
+    bias += convert_factor_to_weight_bias(likes.len() as f32, 10f32, 0.1f32);
     bias += convert_factor_to_weight_bias(
         (description.len() + title.len()) as f32,
-        500f32,
-        0.05f32
+        250f32,
+        0.1f32
     );
 
     //let _today = iso8601::date(iso8601(&SystemTime::now()).as_str()).unwrap();
@@ -87,52 +74,36 @@ fn get_users_from_weighting(user: &User) -> Vec<i32> {
     let follower_bias: f32 = 1f32 / (user.followers.len() as f32);
     let following_bias: f32 = 2f32 / (user.following.len() as f32);
 
-    let mut initial_biases: Vec<FeedWeight> = Vec::new();
+    let mut initial_biases: HashMap<i32, f32> = HashMap::new();
     for follower in user.followers.iter() {
-        initial_biases.push(FeedWeight { id: follower.clone(), weight: follower_bias });
+        initial_biases.insert(*follower, follower_bias);
     }
     for following in user.following.iter() {
-        initial_biases.push(FeedWeight { id: following.clone(), weight: following_bias });
-    }
-
-    let mut combined_users: Vec<FeedWeight> = Vec::new();
-    for bias in initial_biases.iter() {
-        let mut flag = false;
-        for u in combined_users.iter_mut() {
-            if u.id == bias.id {
-                u.weight += bias.weight;
-                flag = true;
+        match initial_biases.contains_key(following) {
+            true => {
+                initial_biases.entry(*following).and_modify(|v| {*v += following_bias});  
+            },
+            _ => {
+                initial_biases.insert(*following, following_bias);
             }
         }
-
-        if !flag {
-            combined_users.push(bias.clone());
-        }
     }
 
-    for u in combined_users.iter_mut() {
-        let weight_add = calculate_weight_bias_for_user(u);
-        u.weight += weight_add;
+    for u in initial_biases.iter_mut() {
+        let weight_add = calculate_weight_bias_for_user(*u.0);
+        *u.1 += weight_add;
     }
+
+    println!("Initial user biases: {:?}", initial_biases);
 
     let mut final_users: Vec<i32> = Vec::new();
     let mut rng = rand::thread_rng();
     let max_user_selection = 15;
     for _ in 0..max_user_selection {
         let rand: f32 = rng.gen();
-        let mut flag = false;
-        for u in combined_users.iter_mut() {
-            if u.weight >= rand {
-                final_users.push(u.id.clone());
-                flag = true;
-                break;
-            }
-        }
-
-        if !flag {
-            let temp_user = combined_users.iter().choose(&mut rng);
-            if temp_user.is_some() {
-                final_users.push(temp_user.unwrap().id.clone());
+        for u in initial_biases.iter() {
+            if u.1 >= &rand {
+                final_users.push(*u.0);
             }
         }
     }
@@ -142,17 +113,14 @@ fn get_users_from_weighting(user: &User) -> Vec<i32> {
 
 fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
     let initial_bias = 0.5f32;
-    let mut initial_biases: Vec<FeedWeight> = Vec::new();
+    let mut post_weights: HashMap<i32, f32> = HashMap::new();
     for u in users {
         let ps = get_posts_from_user_id(u);
+        let mut w = 0f32;
         for p in ps {
-            initial_biases.push(FeedWeight { id: p.id, weight: initial_bias });
+            w = calculate_weight_bias_for_post(p);
         }
-    }
-
-    for p in initial_biases.iter_mut() {
-        let weight_add = calculate_weight_bias_for_post(p);
-        p.weight += weight_add;
+        post_weights.insert(u, w + initial_bias);
     }
 
     let mut final_posts: Vec<i32> = Vec::new();
@@ -160,19 +128,10 @@ fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
     let max_post_selection = 15;
     for _ in 0..max_post_selection {
         let rand: f32 = rng.gen();
-        let mut flag = false;
-        for p in initial_biases.iter_mut() {
-            if p.weight >= rand {
-                final_posts.push(p.id.to_owned());
-                flag = true;
+        for p in post_weights.iter() {
+            if p.1 >= &rand {
+                final_posts.push(*p.0);
                 break;
-            }
-        }
-
-        if !flag {
-            let temp_user = initial_biases.iter().choose(&mut rng);
-            if temp_user.is_some() {
-                final_posts.push(temp_user.unwrap().id.to_owned());
             }
         }
     }
@@ -181,9 +140,10 @@ fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
 }
 
 pub fn get_user_specific_feed_posts(user: &User) -> Vec<Post> {
-    // TODO: get users and posts 
     let users = get_users_from_weighting(user);
-    let posts: Vec<i32> = get_posts_from_weighting(users.clone());
+    println!("Possible users: {:?}", users);
+    let posts: Vec<i32> = get_posts_from_weighting(users);
+    println!("Posts: {:?}", posts);
 
     let mut fetched_posts: Vec<Post> = Vec::new();
     for p in posts.iter() {
