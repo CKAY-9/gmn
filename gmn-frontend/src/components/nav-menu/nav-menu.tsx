@@ -73,6 +73,18 @@ const NavMenu = (props: {
 								/>
 								<span>Fitness</span>
 							</Link>
+							{path[1] === "admin" && (
+								<Link href="/admin" style={{ "opacity": "1" }}>
+									<Image
+										src="/icons/shield.svg"
+										alt="Admin"
+										sizes="100%"
+										width={0}
+										height={0}
+									/>
+									<span>Admin</span>
+								</Link>
+							)}
 						</>
 					)}
 				</section>

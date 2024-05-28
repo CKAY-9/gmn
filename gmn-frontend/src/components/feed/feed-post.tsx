@@ -16,7 +16,7 @@ const FeedPost = (props: {
 
   useEffect(() => {
     (async () => {
-      const c = await getUserFromID(props.post.id);
+      const c = await getUserFromID(props.post.user_id);
       setCreator(c);
     })();
   }, [props.post.user_id]);
@@ -29,7 +29,7 @@ const FeedPost = (props: {
       </section>
       <section>
         {creator !== null && (
-          <Link href={`/user/${props.post.id}`}>
+          <Link href={`/user/${props.post.user_id}`}>
             <UserChip user={creator} />
           </Link>
         )}

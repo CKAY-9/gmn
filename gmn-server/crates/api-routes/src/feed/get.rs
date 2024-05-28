@@ -1,9 +1,9 @@
 use actix_web::{get, http::StatusCode, web, HttpRequest, HttpResponse, Responder};
-use diesel::{prelude::RunQueryDsl, query_dsl::methods::SelectDsl, SelectableHelper};
-use gmn_db::{create_connection, crud::{post::get_post_from_id, user::get_user_from_token}};
+use diesel::{prelude::RunQueryDsl, query_dsl::methods::{LimitDsl, OrderDsl, SelectDsl}, ExpressionMethods, SelectableHelper};
+use gmn_db::{create_connection, crud::{post::{get_post_from_id, get_posts_from_user_id}, user::get_user_from_token}};
 use gmn_db_schema::{models::Post, schema::posts};
 use gmn_utils::extract_header_value;
-use crate::dto::Message;
+use crate::{dto::Message, user::dto::GetUserDTO};
 
 use super::{dto::GetPostDTO, helpers::get_user_specific_feed_posts};
 
@@ -12,6 +12,8 @@ pub async fn get_explore_posts() -> Result<impl Responder, Box<dyn std::error::E
     let connection = &mut create_connection();
     let posts = posts::table
         .select(Post::as_select())
+        .order(posts::id.desc())
+        .limit(15)
         .load(connection);
 
     match posts {
@@ -39,6 +41,14 @@ pub async fn get_post(_request: HttpRequest, query: web::Query<GetPostDTO>) -> R
         }
     }
 }
+
+// /feed/post
+#[get("/user")]
+pub async fn get_posts_from_user(_request: HttpRequest, query: web::Query<GetUserDTO>) -> Result<impl Responder, Box<dyn std::error::Error>> {
+    let posts = get_posts_from_user_id(query.user_id);
+    Ok(HttpResponse::Ok().json(posts))
+}
+
 
 #[get("")]
 pub async fn get_feed_posts(request: HttpRequest) -> Result<impl Responder, Box<dyn std::error::Error>> {

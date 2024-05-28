@@ -100,9 +100,11 @@ fn get_users_from_weighting(user: &User) -> Vec<i32> {
     let mut rng = rand::thread_rng();
     let max_user_selection = 15;
     for _ in 0..max_user_selection {
-        let rand: f32 = rng.gen();
         for u in initial_biases.iter() {
-            if u.1 >= &rand {
+            if final_users.len() >= 15 {
+                break;
+            }
+            if u.1 >= &rng.gen::<f32>() {
                 final_users.push(*u.0);
             }
         }
@@ -127,11 +129,12 @@ fn get_posts_from_weighting(users: Vec<i32>) -> Vec<i32> {
     let mut rng = rand::thread_rng();
     let max_post_selection = 15;
     for _ in 0..max_post_selection {
-        let rand: f32 = rng.gen();
         for p in post_weights.iter() {
-            if p.1 >= &rand {
-                final_posts.push(*p.0);
+            if final_posts.len() >= 15 {
                 break;
+            }
+            if p.1 >= &rng.gen::<f32>() {
+                final_posts.push(*p.0);
             }
         }
     }

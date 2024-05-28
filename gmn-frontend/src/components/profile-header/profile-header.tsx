@@ -40,6 +40,10 @@ const ProfileHeader = (props: {
         <h2 className={style.username}>{props.profile.username}</h2>
       </section>
       <section>
+        <div style={{"display": "flex", "gap": "0.5rem"}}>
+          <span><span style={{"fontWeight": "800"}}>{props.profile.followers.length}</span> Followers</span>
+          <span><span style={{"fontWeight": "800"}}>{props.profile.following.length}</span> Following</span>
+        </div>
         {edit_mode ? (
           <>
             <textarea onChange={(e: BaseSyntheticEvent) => setBio(e.target.value)} placeholder="User Bio" defaultValue={bio} cols={50} rows={5}></textarea>

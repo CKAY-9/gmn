@@ -45,7 +45,7 @@ const Entry = (props: {
         </>
       ) : (
         <>
-          <span>{name}</span>
+          <span style={{"fontWeight": "600"}}>{name}</span>
           <span>Calories: {cals}kcal</span>
           <span>Protein: {pro}g</span>
           <span>Carbs: {carbs}g</span>

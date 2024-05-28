@@ -1,7 +1,7 @@
 "use client"
 
 import { UserDTO } from "@/api/user/user.dto"
-import Exercise from "@/components/exercise/exercise"
+import Workouts from "@/components/workouts/workouts"
 import Goals from "@/components/goals/goals"
 import Macros from "@/components/macros/macros"
 
@@ -17,7 +17,7 @@ const FitnessClient = (props: {
         <Macros user={props.user} />
       </div>
       <div className="subject">
-        <Exercise user={props.user} />
+        <Workouts user={props.user} />
       </div>
     </>
   );

@@ -30,6 +30,22 @@ export const getFeedPosts = async (): Promise<PostDTO[]> => {
   }
 };
 
+export const getFeedPostsFromUserID = async (user_id: number): Promise<PostDTO[]> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/feed/post/user",
+      method: "GET",
+      params: {
+        user_id
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return [];
+  }
+}
+
+
 export const deleteFeedPostFromID = async (id: number): Promise<boolean> => {
   try {
     const request = await axios({

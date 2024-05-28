@@ -5,6 +5,7 @@ import style from "./user.module.scss";
 import PersonalRecords from "@/components/personal-records/personal-records";
 import ProfileHeader from "@/components/profile-header/profile-header";
 import ProfileWorkouts from "@/components/profile-workouts/profile-workouts";
+import ProfilePosts from "@/components/profile-posts/profile-posts";
 
 const UserClient = (props: {
   profile: UserDTO,
@@ -24,7 +25,7 @@ const UserClient = (props: {
             <ProfileWorkouts user={props.user} profile={props.profile} />
           </section>
           <section className={"subject"}>
-
+            <ProfilePosts user={props.user} profile={props.profile} />
           </section>
         </section>
       </div >

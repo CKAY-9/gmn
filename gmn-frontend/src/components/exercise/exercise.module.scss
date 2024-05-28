@@ -1,0 +1,23 @@
+.exercise {
+  border: var(--secondary) 1px solid;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: var(--shdw1);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: space-between;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.iframe {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+}
