@@ -5,7 +5,7 @@ use gmn_api_routes::{
         post::new_exercise,
     }, feed::{
         get::{get_explore_posts, get_feed_posts, get_post, get_posts_from_user},
-        post::new_post,
+        post::{like_feed_post, new_post},
     }, goals::{get::get_goals, put::update_goals}, macros::{get::{get_macros, get_weekly_macros}, put::update_macros_entries}, user::{
         get::{get_user, login_with_discord, login_with_github},
         post::follow_or_unfollower_user,
@@ -51,6 +51,7 @@ pub fn config_posts(cfg: &mut web::ServiceConfig) {
                 .service(new_post)
                 .service(get_post)
                 .service(get_posts_from_user)
+                .service(like_feed_post)
             ),
     );
 }

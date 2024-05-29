@@ -5,7 +5,6 @@ use gmn_db::crud::{
 };
 use gmn_db_schema::models::NewPersonalGoal;
 use gmn_utils::extract_header_value;
-
 use crate::{dto::Message, user::dto::GetUserOptionDTO};
 
 #[get("")]
@@ -48,7 +47,9 @@ pub async fn get_goals(
             let user = user_option.unwrap();
             let goal_option = get_personal_goal_from_id(user.id);
             match goal_option {
-                Some(g) => Ok(HttpResponse::Ok().json(g)),
+                Some(g) => {
+                    Ok(HttpResponse::Ok().json(g))
+                },
                 None => {
                     let g_option = create_personal_goal(NewPersonalGoal {
                         user_id: user.id,

@@ -60,6 +60,23 @@ export const getFeedPostsFromID = async (post_id: number): Promise<PostDTO | nul
   }
 }
 
+export const likeFeedPostFromID = async (post_id: number): Promise<PostDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/feed/post/like",
+      method: "POST",
+      data: {
+        post_id
+      },
+      headers: {
+        Authorization: getCookie("token") || ""
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+}
 
 export const deleteFeedPostFromID = async (id: number): Promise<boolean> => {
   try {

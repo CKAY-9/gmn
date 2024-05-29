@@ -5,6 +5,7 @@ import style from "./like.module.scss";
 import { PostDTO } from "@/api/feed/feed.dto";
 import { BaseSyntheticEvent, useState } from "react";
 import { UserDTO } from "@/api/user/user.dto";
+import { likeFeedPostFromID } from "@/api/feed/feed.api";
 
 const LikeButton = (props: {
   post: PostDTO,
@@ -15,6 +16,11 @@ const LikeButton = (props: {
 
   const toggleLike = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
+    const like = await likeFeedPostFromID(props.post.id);
+    if (like !== null) {
+      setLiked(like.likes.includes(props.user?.id || 0));
+      setLikes(like.likes);
+    }
     setLiked(!liked);
   }
 

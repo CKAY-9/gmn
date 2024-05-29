@@ -28,17 +28,22 @@ pub fn get_personal_goal_from_id(personal_goal_id: i32) -> Option<PersonalGoal> 
     }
 }
 
-pub fn get_personal_goal_from_user_id(user_id: i32) -> Vec<PersonalGoal> {
+pub fn get_personal_goal_from_user_id(user_id: i32) -> Option<PersonalGoal> {
     let connection = &mut create_connection();
-    let find = personal_goals::table.filter(personal_goals::user_id.eq(user_id)).load(connection);
+    let find: QueryResult<PersonalGoal> = personal_goals::table
+        .filter(personal_goals::user_id.eq(user_id))
+        .first::<PersonalGoal>(connection);
 
     match find {
-        Ok(m) => { m }
-        Err(_e) => { vec![] }
+        Ok(m) => { Some(m) }
+        Err(_e) => { None }
     }
 }
 
-pub fn update_personal_goal_from_id(personal_goals_id: i32, personal_goals_update: NewPersonalGoal) -> Option<PersonalGoal> {
+pub fn update_personal_goal_from_id(
+    personal_goals_id: i32,
+    personal_goals_update: NewPersonalGoal
+) -> Option<PersonalGoal> {
     let connection = &mut create_connection();
     let update = diesel
         ::update(personal_goals::table)

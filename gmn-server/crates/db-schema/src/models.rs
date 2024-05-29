@@ -51,7 +51,7 @@ pub struct NewUsergroup {
     pub permission: i32
 }
 
-#[derive(Queryable, Selectable, Serialize, Deserialize, Debug)]
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
 #[diesel(table_name = crate::schema::workouts)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Workout {
@@ -155,7 +155,7 @@ pub struct PersonalGoal {
     pub activity_goal: i32
 }
 
-#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone)]
+#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone, Debug)]
 #[diesel(table_name = crate::schema::personal_goals)]
 pub struct NewPersonalGoal {
     pub user_id: i32,

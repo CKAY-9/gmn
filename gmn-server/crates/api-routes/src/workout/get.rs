@@ -1,9 +1,10 @@
 use std::time::SystemTime;
 
 use super::{dto::GetWorkoutsDTO, helpers::get_workouts_from_date};
-use crate::{dto::Message, user::dto::GetUserDTO};
+use crate::{dto::Message, goals::helpers::get_total_activity_level, user::dto::GetUserDTO};
 use actix_web::{get, http::StatusCode, web, HttpResponse, Responder};
-use gmn_db::crud::{user::get_user_from_id, workout::get_workouts_from_user_id};
+use gmn_db::crud::{goals::{get_personal_goal_from_user_id, update_personal_goal_from_id}, user::get_user_from_id, workout::get_workouts_from_user_id};
+use gmn_db_schema::models::NewPersonalGoal;
 use gmn_utils::iso8601;
 
 #[get("")]
@@ -32,6 +33,15 @@ pub async fn get_workout(
     };
 
     let workout = get_workouts_from_date(user.id, workouts, date_to_get);
+
+    let goals_option = get_personal_goal_from_user_id(user.id);
+    if goals_option.is_some() {
+        let mut goals = goals_option.unwrap();
+        goals.activity_level = get_total_activity_level(workout.clone());
+        let goal_update = serde_json::from_str::<NewPersonalGoal>(serde_json::to_string(&goals).unwrap().as_str()).unwrap();
+        let _ = update_personal_goal_from_id(goals.id, goal_update);
+    }
+
     Ok(HttpResponse::Ok().json(workout))
 }
 
