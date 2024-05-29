@@ -23,6 +23,19 @@ diesel::table! {
 }
 
 diesel::table! {
+    personal_goals (id) {
+        id -> Int4,
+        user_id -> Int4,
+        height -> Int4,
+        weight -> Int4,
+        activity_level -> Int4,
+        calorie_goal -> Int4,
+        weight_goal -> Int4,
+        activity_goal -> Int4,
+    }
+}
+
+diesel::table! {
     posts (id) {
         id -> Int4,
         title -> Text,
@@ -73,6 +86,7 @@ diesel::table! {
 diesel::allow_tables_to_appear_in_same_query!(
     exercises,
     macros,
+    personal_goals,
     posts,
     usergroups,
     users,

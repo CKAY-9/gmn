@@ -1,0 +1,29 @@
+.users {
+  display: grid;
+  grid-template-columns: minmax(250px, auto);
+  gap: 0.5rem;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.user {
+  padding: 0.5rem;
+  border: 1px solid var(--secondary);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  opacity: 1;
+  color: var(--text);
+
+  &:hover {
+    text-decoration: none;
+    border-color: var(--primary);
+  }
+}
+
+.pfp {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}

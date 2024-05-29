@@ -44,7 +44,9 @@ const Explore = (props: {
           </div>
         ) : (
           <>
-            {props.user !== null && <NewPost user={props.user} />}
+            {props.user !== null && <NewPost user={props.user} on_create={(new_post: PostDTO) => {
+              setPosts((old) => [new_post, ...old]);
+            }}  />}
             <div className={style.posts}>
               {posts.map((post, index) => {
                 return (<FeedPost post={post} user={props.user} key={index} />);

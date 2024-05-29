@@ -12,7 +12,7 @@ use super::dto::NewPostDTO;
 #[post("")]
 pub async fn new_post(
     request: HttpRequest,
-    data: web::Data<NewPostDTO>
+    data: web::Json<NewPostDTO>
 ) -> Result<impl Responder, Box<dyn std::error::Error>> {
     let token_option = extract_header_value(&request, "Authorization");
     if token_option.is_none() {

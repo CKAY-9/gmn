@@ -28,10 +28,6 @@ pub async fn new_exercise(
             }));
     }
 
-    let mut user = user_option.unwrap();
-
-	// TODO: check usergroup / permissions
-
 	let insert = create_exercise(NewExercise {
         name: data.name.clone(),
         description: data.description.clone(),

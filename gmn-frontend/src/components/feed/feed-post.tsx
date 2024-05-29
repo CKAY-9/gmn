@@ -22,9 +22,9 @@ const FeedPost = (props: {
   }, [props.post.user_id]);
 
   return (
-    <div className={style.post}>
+    <Link href={`/feed/${props.post.id}`} className={style.post}>
       <section>
-        <h2>{props.post.title}</h2>
+        <h3>{props.post.title}</h3>
         <span>{props.post.description}</span>
       </section>
       <section>
@@ -34,7 +34,7 @@ const FeedPost = (props: {
           </Link>
         )}
       </section>
-    </div>
+    </Link>
   );
 }
 

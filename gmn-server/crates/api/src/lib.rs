@@ -3,17 +3,14 @@ use gmn_api_routes::{
     exercise::{
         get::{get_all_exercises, get_exercise},
         post::new_exercise,
-    },
-    feed::{
+    }, feed::{
         get::{get_explore_posts, get_feed_posts, get_post, get_posts_from_user},
         post::new_post,
-    },
-    macros::{get::get_macros, put::update_macros_entries},
-    user::{
+    }, goals::{get::get_goals, put::update_goals}, macros::{get::{get_macros, get_weekly_macros}, put::update_macros_entries}, user::{
         get::{get_user, login_with_discord, login_with_github},
         post::follow_or_unfollower_user,
         put::{update_personal_reconds, update_user},
-    }, workout::{get::get_workout, put::update_workout_entries},
+    }, workout::{get::get_workout, put::update_workout_entries}
 };
 
 pub fn configure_api(cfg: &mut web::ServiceConfig) {
@@ -24,6 +21,7 @@ pub fn configure_api(cfg: &mut web::ServiceConfig) {
             .configure(config_exercises)
             .configure(config_workouts)
             .configure(config_posts)
+            .configure(config_goals)
             .configure(config_macros),
     );
 }
@@ -78,7 +76,16 @@ pub fn config_macros(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/macros")
             .service(get_macros)
+            .service(get_weekly_macros)
             .service(update_macros_entries),
+    );
+}
+
+pub fn config_goals(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/goals")
+            .service(get_goals)
+            .service(update_goals)
     );
 }
 

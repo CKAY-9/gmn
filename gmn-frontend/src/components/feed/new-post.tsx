@@ -3,7 +3,8 @@ import { UserDTO } from "@/api/user/user.dto"
 import { BaseSyntheticEvent, useEffect, useState } from "react";
 
 const NewPost = (props: {
-  user: UserDTO
+  user: UserDTO,
+  on_create?: Function
 }) => {
   const [show_expanded, setShowExpanded] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
@@ -24,10 +25,30 @@ const NewPost = (props: {
   }, []);
 
   const create = async (e: BaseSyntheticEvent) => {
+    if (typeof (document) === undefined || typeof (window) === undefined) {
+      return;
+    }
+
     e.preventDefault();
     const response = await createNewFeedPost(title, description, files);
     if (response) {
-      // created post
+      const title_input: HTMLInputElement = document.getElementById("new_post_title_input") as HTMLInputElement;
+      if (title_input !== null) {
+        title_input.value = "";
+      }
+      const desc_input: HTMLInputElement = document.getElementById("new_post_desc_input") as HTMLInputElement;
+      if (desc_input !== null) {
+        desc_input.value = "";
+      }
+
+      setTitle("");
+      setDescription("");
+      setFiles([]);
+      setShowExpanded(false);
+
+      if (props.on_create !== undefined) {
+        props.on_create(response);
+      }
     }
   }
 
@@ -42,7 +63,7 @@ const NewPost = (props: {
         <input type="text" id="new_post_title_input" placeholder="Create a new post" style={{ "width": "auto" }} onChange={(e: BaseSyntheticEvent) => setTitle(e.target.value)} />
         {show_expanded && (
           <>
-            <textarea style={{ "width": "auto" }} placeholder="Description" onChange={(e: BaseSyntheticEvent) => setDescription(e.target.value)} />
+            <textarea id="new_post_desc_input" style={{ "width": "auto" }} placeholder="Description" onChange={(e: BaseSyntheticEvent) => setDescription(e.target.value)} />
             <span>Files</span>
             <input type="file" />
             <section style={{"display": "flex", "gap": "1rem"}}>

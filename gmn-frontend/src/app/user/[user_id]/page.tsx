@@ -40,10 +40,10 @@ const UserPage = async ({params}: {
         <NavMenu user={user} />
         <div className="content">
           {profile === null ? (
-            <>
+            <div className="subject">
               <h1>Error</h1>
               <span>Sorry, we were unable to find the user with the ID {profile_id}.</span>
-            </>
+            </div>
           ) : (
             <>
               <UserClient user={user} profile={profile} />

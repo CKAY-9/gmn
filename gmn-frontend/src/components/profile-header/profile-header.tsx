@@ -8,6 +8,7 @@ import { BaseSyntheticEvent, useState } from "react";
 import { updateUserFromID } from "@/api/user/user.api";
 import Logout from "../logout-button/logout";
 import Follow from "../follow-button/follow-button";
+import FollowList from "../follow-list/follow-list";
 
 const ProfileHeader = (props: {
   profile: UserDTO,
@@ -15,6 +16,8 @@ const ProfileHeader = (props: {
 }) => {
   const [edit_mode, setEditMode] = useState<boolean>(false);
   const [bio, setBio] = useState<string>(props.profile.bio || "No bio provided.");
+  const [show_followers, setShowFollowers] = useState<boolean>(false);
+  const [show_following, setShowFollowing] = useState<boolean>(false);
   const is_self = props.profile.id === props.user?.id;
 
   const toggleEditMode = async (e: BaseSyntheticEvent) => {
@@ -28,6 +31,16 @@ const ProfileHeader = (props: {
 
   return (
     <div className={style.header}>
+      {show_followers && (
+        <>
+          <FollowList close={() => setShowFollowers(false)} user_ids={props.profile.followers} title="Followers" />
+        </>
+      )}
+      {show_following && (
+        <>
+          <FollowList close={() => setShowFollowing(false)} user_ids={props.profile.following} title="Following" />
+        </>
+      )}
       <section className={style.splash}>
         <Image
           src={props.profile.avatar}
@@ -41,8 +54,12 @@ const ProfileHeader = (props: {
       </section>
       <section>
         <div style={{"display": "flex", "gap": "0.5rem"}}>
-          <span><span style={{"fontWeight": "800"}}>{props.profile.followers.length}</span> Followers</span>
-          <span><span style={{"fontWeight": "800"}}>{props.profile.following.length}</span> Following</span>
+          <button className="hidden" onClick={() => setShowFollowers(!show_followers)}>
+            <span><span style={{"fontWeight": "800"}}>{props.profile.followers.length}</span> Followers</span>
+          </button>
+          <button className="hidden" onClick={() => setShowFollowing(!show_following)}>
+            <span><span style={{"fontWeight": "800"}}>{props.profile.following.length}</span> Following</span>
+          </button>
         </div>
         {edit_mode ? (
           <>

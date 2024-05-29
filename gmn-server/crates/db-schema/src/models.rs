@@ -105,7 +105,7 @@ pub struct Macros {
     pub entries: Vec<String>
 }
 
-#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone)]
+#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone, Debug)]
 #[diesel(table_name = crate::schema::macros)]
 pub struct NewMacros {
     pub user_id: i32,
@@ -139,4 +139,30 @@ pub struct NewPost {
     pub likes: Vec<i32>,
     pub files: Vec<String>,
     pub user_id: i32
+}
+
+#[derive(Queryable, Selectable, Serialize, Deserialize, Debug, Clone)]
+#[diesel(table_name = crate::schema::personal_goals)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct PersonalGoal {
+    pub id: i32,
+    pub user_id: i32,
+    pub height: i32,
+    pub weight: i32,
+    pub activity_level: i32,
+    pub calorie_goal: i32,
+    pub weight_goal: i32,
+    pub activity_goal: i32
+}
+
+#[derive(Insertable, AsChangeset, Deserialize, Serialize, Clone)]
+#[diesel(table_name = crate::schema::personal_goals)]
+pub struct NewPersonalGoal {
+    pub user_id: i32,
+    pub height: i32,
+    pub weight: i32,
+    pub activity_level: i32,
+    pub calorie_goal: i32,
+    pub weight_goal: i32,
+    pub activity_goal: i32
 }

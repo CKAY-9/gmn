@@ -1,0 +1,12 @@
+.like {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  font-weight: 600;
+}

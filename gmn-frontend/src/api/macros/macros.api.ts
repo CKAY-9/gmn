@@ -3,6 +3,22 @@ import { API_URL } from "../resources";
 import { MacrosDTO } from "./macros.dto";
 import { getCookie } from "@/utils/cookies";
 
+export const getWeeklyMacros = async (user_id: number): Promise<MacrosDTO[]> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/macros/weekly",
+      method: "GET",
+      params: {
+        user_id,
+        date: ""
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return [];
+  }
+}
+
 export const getMacrosFromUserID = async (user_id: number, date?: string): Promise<MacrosDTO | null> => {
   const date_string = date === undefined ? "" : date;
   try {
@@ -11,7 +27,7 @@ export const getMacrosFromUserID = async (user_id: number, date?: string): Promi
       method: "GET",
       params: {
         user_id,
-        date: date_string
+        date: date_string || ""
       }
     });
     return request.data;

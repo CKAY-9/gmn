@@ -11,7 +11,8 @@ import FeedPost from "./feed-post";
 import LoadingWheel from "../loading/loading";
 
 const Feed = (props: {
-  user: UserDTO | null
+  user: UserDTO | null,
+  hide_new?: boolean
 }) => {
   const [posts, setPosts] = useState<PostDTO[]>([]);
   const [initial_load, setInitialLoad] = useState<boolean>(true);
@@ -53,7 +54,9 @@ const Feed = (props: {
           </div>
         ) : (
           <>
-            <NewPost user={props.user} />
+            {!props.hide_new && <NewPost user={props.user} on_create={(new_post: PostDTO) => {
+              setPosts((old) => [new_post, ...old]);
+            }} />}
             <div className={style.posts}>
               {posts.map((post, index) => {
                 return (<FeedPost post={post} user={props.user} key={index} />);

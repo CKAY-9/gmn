@@ -4,5 +4,6 @@ export interface PostDTO {
 	description: string,
 	date: string,
 	files: string[],
-	user_id: number
+	user_id: number,
+	likes: number[]
 }
