@@ -10,7 +10,7 @@ use gmn_api_routes::{
         get::{get_user, login_with_discord, login_with_github},
         post::follow_or_unfollower_user,
         put::{update_personal_reconds, update_user},
-    }, workout::{get::get_workout, put::update_workout_entries}
+    }, workout::{get::{get_all_workouts, get_workout}, put::{update_workout_entries, update_workout_info}}
 };
 
 pub fn configure_api(cfg: &mut web::ServiceConfig) {
@@ -68,7 +68,9 @@ pub fn config_workouts(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/workout")
             .service(get_workout)
-            .service(update_workout_entries),
+            .service(get_all_workouts)
+            .service(update_workout_entries)
+            .service(update_workout_info),
     );
 }
 

@@ -6,6 +6,7 @@ import { UserDTO } from "@/api/user/user.dto";
 import Exercise from "@/components/exercise/exercise";
 import LoadingWheel from "@/components/loading/loading";
 import { BaseSyntheticEvent, useEffect, useState } from "react";
+import style from "./admin.module.scss";
 
 const AdminClient = (props: {
   user: UserDTO
@@ -51,7 +52,7 @@ const AdminClient = (props: {
         <div style={{"display": "flex", "flexDirection": "column", "gap": "0.5rem"}}>
           <h3>Existing Exercises</h3>
           {loading && <LoadingWheel size_in_rems={2} />}
-          <div style={{"display": "flex", "gap": "1rem"}}>
+          <div className={style.exercises}>
             {(!loading && exercises.length <= 0) && <span>There are no existing exercises.</span>}
             {exercises.map((e, index) => {
               return (<Exercise key={index} exercise={e} />)

@@ -15,7 +15,7 @@ const Exercise = (props: { exercise: ExerciseDTO }) => {
         {props.exercise.example_video.includes("youtube") && (
           <iframe
             width="300"
-            height="315"
+            height="300"
             src={`https://www.youtube.com/embed/${props.exercise.example_video.split("?v=")[1]}`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

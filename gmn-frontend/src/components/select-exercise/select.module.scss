@@ -1,7 +1,7 @@
 .exercises {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, auto));
   gap: 1rem;
+  grid-template-columns: repeat(3, auto);
   overflow-y: auto;
 }
 

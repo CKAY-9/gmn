@@ -3,7 +3,7 @@ use std::time::SystemTime;
 use gmn_db_schema::models::{ Macros, NewMacros };
 use gmn_utils::iso8601;
 
-pub fn get_macros_from_date(user_id: i32, macros: Vec<Macros>, date: String) -> Macros {
+pub fn get_macros_from_date(user_id: i32, macros: Vec<Macros>, date: String, date_to_set: Option<SystemTime>) -> Macros {
     for m in macros {
         let temp_date = m.date;
         let date_to_iso = iso8601::date(&temp_date);
@@ -13,7 +13,10 @@ pub fn get_macros_from_date(user_id: i32, macros: Vec<Macros>, date: String) -> 
                     return Macros {
                         id: m.id,
                         user_id: m.user_id,
-                        date: iso8601(&SystemTime::now()),
+                        date: match date_to_set {
+                            Some(t) => iso8601(&t),
+                            None => iso8601(&SystemTime::now())
+                        },
                         calories: m.calories,
                         protein: m.protein,
                         carbs: m.carbs,
@@ -30,7 +33,10 @@ pub fn get_macros_from_date(user_id: i32, macros: Vec<Macros>, date: String) -> 
 
     let new_macros = NewMacros {
         user_id,
-        date: iso8601(&SystemTime::now()),
+        date: match date_to_set {
+            Some(t) => iso8601(&t),
+            None => iso8601(&SystemTime::now())
+        },
         calories: 0,
         protein: 0,
         carbs: 0,
@@ -44,7 +50,10 @@ pub fn get_macros_from_date(user_id: i32, macros: Vec<Macros>, date: String) -> 
             Macros {
                 id: 0,
                 user_id,
-                date: iso8601(&SystemTime::now()),
+                date: match date_to_set {
+                    Some(t) => iso8601(&t),
+                    None => iso8601(&SystemTime::now())
+                },
                 calories: 0,
                 protein: 0,
                 carbs: 0,

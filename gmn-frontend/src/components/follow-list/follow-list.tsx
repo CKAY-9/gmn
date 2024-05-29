@@ -47,6 +47,7 @@ const FollowList = (props: {
                 </Link>
               )
             })}
+            {users.length <= 0 && <span>This user has no {props.title.toLowerCase()}</span>}
           </div>
         </>
       </Popup>

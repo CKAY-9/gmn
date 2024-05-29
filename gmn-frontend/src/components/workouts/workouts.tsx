@@ -10,7 +10,7 @@ import { WorkoutDTO, WorkoutExerciseDTO } from "@/api/workout/workout.dto";
 import { getExerciseFromID } from "@/api/exercise/exercise.api";
 import LoadingWheel from "../loading/loading";
 import EditButton from "../edit-button/edit-button";
-import { getWorkoutsFromUserID, updateWorkoutEntriesFromWorkoutID } from "@/api/workout/workout.api";
+import { getWorkoutsFromUserID, updateWorkoutEntriesFromWorkoutID, updateWorkoutInfoFromWorkoutID } from "@/api/workout/workout.api";
 
 const ExerciseEntry = (props: {
   exercise: WorkoutExerciseDTO;
@@ -104,6 +104,9 @@ const Workouts = (props: { user: UserDTO }) => {
   const [show_select, setShowSelect] = useState<boolean>(false);
   const [exercises, setExercises] = useState<WorkoutExerciseDTO[]>([]);
   const [raw_exercises, setRawExercises] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [allow_save, setAllowSave] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -119,10 +122,28 @@ const Workouts = (props: { user: UserDTO }) => {
     })();
   }, [props.user.id]);
 
+  useEffect(() => {
+    const show_save = title !== workout?.title || description !== workout.description;
+    setAllowSave(show_save);
+  }, [title, description]);
+
   const openSelect = (e: BaseSyntheticEvent) => {
     e.preventDefault();
     setShowSelect(true);
   };
+
+  const updateInfo = async (e: BaseSyntheticEvent) => {
+    e.preventDefault();
+    if (workout === null) return;
+
+    const u = await updateWorkoutInfoFromWorkoutID(workout.id, title, description);
+    if (u !== null) {
+      workout.title = title;
+      workout.description = description;
+      setWorkout(workout);
+      setAllowSave(false);
+    }
+  }
 
   const onExerciseEdit = async (update: WorkoutExerciseDTO, index: number) => {
     if (workout === null) return;
@@ -163,8 +184,9 @@ const Workouts = (props: { user: UserDTO }) => {
         <LoadingWheel size_in_rems={2} />
       ) : (
         <>
-          <input type="text" placeholder="Title (Optional)" />
-          <textarea name="" id="" cols={50} rows={10} placeholder="Description (Optional)"></textarea>
+          <input defaultValue={workout.title} onChange={(e: BaseSyntheticEvent) => setTitle(e.target.value)} type="text" placeholder="Title (Optional)" />
+          <textarea defaultValue={workout.description} onChange={(e: BaseSyntheticEvent) => setDescription(e.target.value)} cols={50} rows={10} placeholder="Description (Optional)"></textarea>
+          {allow_save && <input onClick={updateInfo} type="button" value="Update" />} 
           <span style={{"opacity": "0.5"}}>(Optional: if a title is given, this workout entry will become public and visible on your profile)</span>
           <button onClick={openSelect} className={style.add}>
             <Image

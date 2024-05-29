@@ -7,6 +7,13 @@ pub struct GetWorkoutsDTO {
 }
 
 #[derive(Deserialize)]
+pub struct UpdateWorkoutInfoDTO {
+  pub workout_id: i32,
+  pub title: String,
+  pub description: String
+}
+
+#[derive(Deserialize)]
 pub struct UpdateEntriesDTO {
   pub workout_id: i32,
   pub exercises: Vec<String>

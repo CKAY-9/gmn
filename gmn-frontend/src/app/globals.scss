@@ -52,7 +52,7 @@ input, textarea {
   }
 }
 
-button, input[type="submit"] {
+button, input[type="submit"], input[type="button"] {
   background-color: transparent;
   border: none;
   border-radius: 0.25rem;

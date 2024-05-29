@@ -32,7 +32,7 @@ pub async fn get_macros(
         }
     };
 
-    let today_macros = get_macros_from_date(user.id, macros, date_to_get);
+    let today_macros = get_macros_from_date(user.id, macros, date_to_get, None);
     Ok(HttpResponse::Ok().json(today_macros))
 }
 
@@ -55,9 +55,9 @@ pub async fn get_weekly_macros(
 
     let mut final_macros: Vec<Macros> = vec![];
     for i in 0..7 {
-        let date = iso8601::date(iso8601(&sys_now.checked_sub(Duration::new(60 * 60 * 24 * i, 0)).unwrap()).as_str()).unwrap();
-        //let temp_macros = get_macros_from_date(user.id, macros.clone(), date.to_string());
-        //final_macros.push(temp_macros);
+        let date = sys_now.clone().checked_sub(Duration::new(60 * 60 * 24 * i, 0)).unwrap();
+        let temp_macros = get_macros_from_date(user.id, macros.clone(), iso8601::date(iso8601(&date).as_str()).unwrap().to_string(), Some(date));
+        final_macros.push(temp_macros);
     }
 
     Ok(HttpResponse::Ok().json(final_macros))
