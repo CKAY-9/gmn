@@ -7,7 +7,7 @@ use gmn_api_routes::{
         get::{get_explore_posts, get_feed_posts, get_post, get_posts_from_user},
         post::{like_feed_post, new_post},
     }, goals::{get::get_goals, put::update_goals}, macros::{get::{get_macros, get_weekly_macros}, put::update_macros_entries}, user::{
-        get::{get_user, login_with_discord, login_with_github},
+        get::{get_user, get_user_activity, login_with_discord, login_with_github},
         post::follow_or_unfollower_user,
         put::{update_personal_reconds, update_user},
     }, workout::{get::{get_all_workouts, get_workout}, put::{update_workout_entries, update_workout_info}}
@@ -33,6 +33,7 @@ pub fn config_user(cfg: &mut web::ServiceConfig) {
             .service(update_user)
             .service(update_personal_reconds)
             .service(follow_or_unfollower_user)
+            .service(get_user_activity)
             .service(
                 web::scope("/auth")
                     .service(login_with_discord)

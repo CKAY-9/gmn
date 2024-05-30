@@ -44,16 +44,18 @@ const FeedPostClient = (props: {
           </section>
           <section className={style.info}>
             <p>{props.post.description}</p>
-            {(loading_creator || creator === null) ? (
-              <LoadingWheel size_in_rems={2} />
-            ) : (
-              <>
-                <Link href={`/user/${creator.id}`}>
-                  <UserChip user={creator} />
-                </Link>
-              </>
-            )}
-            <LikeButton post={props.post} user={props.user} />
+            <div className={style.social}>
+              {(loading_creator || creator === null) ? (
+                <LoadingWheel size_in_rems={2} />
+              ) : (
+                <>
+                  <Link href={`/user/${creator.id}`}>
+                    <UserChip user={creator} />
+                  </Link>
+                </>
+              )}
+              <LikeButton post={props.post} user={props.user} />
+            </div>
           </section>
         </div>
       </div>

@@ -20,6 +20,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  LogarithmicScale,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -30,7 +31,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  LogarithmicScale
 );
 
 const Goals = (props: {
@@ -43,6 +45,7 @@ const Goals = (props: {
   const [macros, setMacros] = useState<MacrosDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
+  const [log_scale, setLogScale] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -152,7 +155,6 @@ const Goals = (props: {
               </div>
             </div>
           }
-          <span style={{ "opacity": "0.5" }}>(Note: activity level is calculated from your total repititions multiplied by total sets: 1 = 24 (8*3), 5 = 240 (10*24) )</span>
 
           <Line
             height={50}
@@ -187,6 +189,15 @@ const Goals = (props: {
             }}
             options={{
               responsive: true,
+              scales: {
+                x: {
+                  display: true,
+                },
+                y: {
+                  display: true,
+                  type: log_scale ? "logarithmic" : "linear",
+                }
+              },
               plugins: {
                 legend: {
                   position: 'top' as const,
@@ -198,6 +209,13 @@ const Goals = (props: {
               },
             }}
           />
+
+          <section>
+            <label>Log scale</label>
+            <input type="checkbox" onChange={(e: BaseSyntheticEvent) => setLogScale(e.target.checked)} />
+          </section>
+
+          <span style={{ "opacity": "0.5" }}>(Note: activity level is calculated from your total repititions multiplied by total sets: 1 = 24 (8*3), 5 = 240 (10*24) )</span>
 
           <div className={style.edit}>
             <EditButton on_click={toggleEdit} />

@@ -1,7 +1,7 @@
 use std::time::SystemTime;
 
 use super::dto::{
-    DiscordInitialDTO, DiscordUserDTO, GetUserOptionDTO, GithubInitialDTO, GithubUserDTO, UserOAuthDTO,
+    DiscordInitialDTO, DiscordUserDTO, UserActivity, GetUserDTO, GetUserOptionDTO, GithubInitialDTO, GithubUserDTO, UserOAuthDTO
 };
 use crate::dto::Message;
 use actix_web::{
@@ -10,9 +10,9 @@ use actix_web::{
     web::{self, Redirect},
     HttpRequest, HttpResponse, Responder,
 };
-use gmn_db::crud::user::{
+use gmn_db::crud::{post::get_posts_from_user_id, user::{
     create_user, get_user_from_id, get_user_from_oauth, get_user_from_token, update_user_from_id,
-};
+}, workout::get_workouts_from_user_id};
 use gmn_db_schema::models::{NewUser, User};
 use gmn_utils::{extract_header_value, get_env_var, get_local_api_url, iso8601};
 use rand::Rng;
@@ -243,4 +243,25 @@ pub async fn get_user(
             Ok(HttpResponse::Ok().json(user_option.unwrap()))
         }
     }
+}
+
+#[get("/activity")]
+pub async fn get_user_activity(query: web::Query<GetUserDTO>) -> Result<impl Responder, Box<dyn std::error::Error>> {
+    let user_option = get_user_from_id(query.user_id);
+    if user_option.is_none() {
+        return Ok(HttpResponse::Ok().status(StatusCode::NOT_FOUND).json(Message {
+            message: "Failed to get user".to_string()
+        }));
+    }
+
+    let user = user_option.unwrap();
+    let all_posts = get_posts_from_user_id(user.id);
+    let all_workouts = get_workouts_from_user_id(user.id);
+    
+    // TODO: maybe add likes?
+
+    Ok(HttpResponse::Ok().json(UserActivity {
+        posts: all_posts,
+        workouts: all_workouts
+    }))
 }

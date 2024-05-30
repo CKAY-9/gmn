@@ -1,3 +1,6 @@
+import { PostDTO } from "../feed/feed.dto"
+import { WorkoutDTO } from "../workout/workout.dto"
+
 export interface UserDTO {
     id: number,
     token: string,
@@ -10,4 +13,9 @@ export interface UserDTO {
     usergroups: number[],
     followers: number[],
     following: number[]
+}
+
+export interface UserActivityDTO {
+    posts: PostDTO[],
+    workouts: WorkoutDTO[]
 }

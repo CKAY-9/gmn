@@ -1,4 +1,5 @@
-use serde::Deserialize;
+use gmn_db_schema::models::{Post, Workout};
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct UserOAuthDTO {
@@ -52,4 +53,10 @@ pub struct GithubUserDTO {
     pub login: String,
     pub avatar_url: String,
     pub id: u64,
+}
+
+#[derive(Serialize)]
+pub struct UserActivity {
+    pub posts: Vec<Post>,
+    pub workouts: Vec<Workout>
 }

@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import style from "./index.module.scss";
 import Goals from "@/components/goals/goals";
 import Welcome from "@/components/welcome/welcome";
+import RecentActivity from "@/components/recent-activity/recent-activity";
 
 export const generateMetadata = (): Metadata => {
   return {
@@ -51,6 +52,9 @@ const IndexPage = async () => {
               </div>
               <div className="subject">
                 <Goals user={user} />
+              </div>
+              <div className="subject">
+                <RecentActivity user={user} />
               </div>
             </div>
           )}

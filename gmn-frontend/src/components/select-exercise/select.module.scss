@@ -2,6 +2,7 @@
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(3, auto);
+  max-height: 500px;
   overflow-y: auto;
 }
 

@@ -7,6 +7,7 @@ import UserChip from "../user-chip/user-chip";
 import { useEffect, useState } from "react";
 import { getUserFromID } from "@/api/user/user.api";
 import Link from "next/link";
+import LikeButton from "../like-button/like-button";
 
 const FeedPost = (props: {
   post: PostDTO,
@@ -27,12 +28,13 @@ const FeedPost = (props: {
         <h3>{props.post.title}</h3>
         <span>{props.post.description}</span>
       </section>
-      <section>
+      <section className={style.info}>
         {creator !== null && (
           <Link href={`/user/${props.post.user_id}`}>
             <UserChip user={creator} />
           </Link>
         )}
+        <LikeButton user={props.user} post={props.post} />
       </section>
     </Link>
   );

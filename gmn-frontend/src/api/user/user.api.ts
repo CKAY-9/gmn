@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../resources";
-import { UserDTO } from "./user.dto";
+import { UserActivityDTO, UserDTO } from "./user.dto";
 import { getCookie } from "@/utils/cookies";
 
 export const getUserFromID = async (
@@ -95,5 +95,23 @@ export const followUserFromID = async (profile_id: number): Promise<boolean> => 
 	} catch (ex) {
 		console.log(ex);
 		return false;
+	}
+}
+
+export const getUserActivity = async (user_id: number): Promise<UserActivityDTO> => {
+	try {
+		const request = await axios({
+			url: API_URL + "/user/activity",
+			method: "GET",
+			params: {
+				user_id
+			}
+		});
+		return request.data;
+	} catch (ex) {
+		return {
+			posts: [],
+			workouts: []
+		}
 	}
 }
