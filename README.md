@@ -2,6 +2,7 @@
 
 <div align="center">
   <img src="./assets/logo-sqr.png" alt="Home" width="100" height="100px" />
+  <br />
   <img src="./assets/home.png" alt="Home" width="600" height="300px" />
 </div>
 
