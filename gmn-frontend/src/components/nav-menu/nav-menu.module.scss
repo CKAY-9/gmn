@@ -30,7 +30,7 @@
 
 			&:hover {
 				text-decoration: none;
-				background-color: var(--accent);
+				background-color: var(--accent) !important;
 			}
 		}
 	}
@@ -38,4 +38,10 @@
 	* {
 		color: #fff;
 	}
+}
+
+.footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
