@@ -23,7 +23,7 @@ pub fn get_post_from_id(post_id: i32) -> Option<Post> {
         .first::<Post>(connection);
 
     match find {
-        Ok(m) => { Some(m) }
+        Ok(p) => { Some(p) }
         Err(_e) => { None }
     }
 }
@@ -33,21 +33,34 @@ pub fn get_posts_from_user_id(user_id: i32) -> Vec<Post> {
     let find = posts::table.filter(posts::user_id.eq(user_id)).load(connection);
 
     match find {
-        Ok(m) => { m }
+        Ok(p) => { p }
         Err(_e) => { vec![] }
     }
 }
 
-pub fn update_post_from_id(posts_id: i32, posts_update: NewPost) -> Option<Post> {
+pub fn update_post_from_id(post_id: i32, posts_update: NewPost) -> Option<Post> {
     let connection = &mut create_connection();
     let update = diesel
         ::update(posts::table)
-        .filter(posts::id.eq(posts_id))
+        .filter(posts::id.eq(post_id))
         .set(posts_update)
         .get_result::<Post>(connection);
 
     match update {
-        Ok(m) => { Some(m) }
+        Ok(p) => { Some(p) }
+        Err(_e) => { None }
+    }
+}
+
+pub fn delete_post_from_id(post_id: i32) -> Option<Post> {
+    let connection = &mut create_connection();
+    let update = diesel
+        ::delete(posts::table)
+        .filter(posts::id.eq(post_id))
+        .get_result::<Post>(connection);
+
+    match update {
+        Ok(p) => { Some(p) }
         Err(_e) => { None }
     }
 }

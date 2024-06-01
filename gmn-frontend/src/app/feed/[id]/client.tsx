@@ -9,10 +9,11 @@ import Link from "next/link"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
 import style from "./post.module.scss";
 import LikeButton from "@/components/like-button/like-button"
-import { getFeedPostsFromUserID, updateFeedPostFromID } from "@/api/feed/feed.api"
+import { deleteFeedPostFromID, getFeedPostsFromUserID, updateFeedPostFromID } from "@/api/feed/feed.api"
 import FeedPost from "@/components/feed/feed-post"
 import Feed from "@/components/feed/feed"
 import EditButton from "@/components/edit-button/edit-button"
+import DeleteButton from "@/components/delete-button/delete-button"
 
 const FeedPostClient = (props: {
   user: UserDTO | null,
@@ -45,6 +46,15 @@ const FeedPostClient = (props: {
     }
     setEdit(!edit);
   }
+  
+  const deletePost = async () => {
+    if (props.user === null) return;
+
+    const d = await deleteFeedPostFromID(props.post.id)
+    if (d !== null) {
+      window.location.href = `/user/${props.user.id}`; 
+    }
+  }
 
   return (
     <>
@@ -73,6 +83,7 @@ const FeedPostClient = (props: {
                   </Link>
                   {creator.id === props.user?.id && (
                     <>
+                      <DeleteButton on_click={deletePost} />
                       <EditButton on_click={toggleEdit} />
                     </>
                   )}

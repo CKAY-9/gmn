@@ -78,13 +78,13 @@ export const likeFeedPostFromID = async (post_id: number): Promise<PostDTO | nul
   }
 }
 
-export const deleteFeedPostFromID = async (id: number): Promise<boolean> => {
+export const deleteFeedPostFromID = async (post_id: number): Promise<boolean> => {
   try {
     const request = await axios({
       url: API_URL + "/feed/post",
       method: "DELETE",
       data: {
-        id: id,
+        post_id
       },
       headers: {
         Authorization: getCookie("token") || "",
