@@ -120,3 +120,28 @@ export const createNewFeedPost = async (
     return null;
   }
 };
+
+export const updateFeedPostFromID = async (
+  post_id: number,
+  title: string,
+  description: string
+): Promise<PostDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/feed/post",
+      method: "PUT",
+      data: {
+        post_id,
+        title,
+        description
+      },
+      headers: {
+        Authorization: getCookie("token") || "",
+      },
+    });
+    return request.data;
+  } catch (ex) {
+    console.log(ex);
+    return null;
+  }
+};

@@ -6,12 +6,13 @@ import { UserDTO } from "@/api/user/user.dto"
 import LoadingWheel from "@/components/loading/loading"
 import UserChip from "@/components/user-chip/user-chip"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { BaseSyntheticEvent, useEffect, useState } from "react"
 import style from "./post.module.scss";
 import LikeButton from "@/components/like-button/like-button"
-import { getFeedPostsFromUserID } from "@/api/feed/feed.api"
+import { getFeedPostsFromUserID, updateFeedPostFromID } from "@/api/feed/feed.api"
 import FeedPost from "@/components/feed/feed-post"
 import Feed from "@/components/feed/feed"
+import EditButton from "@/components/edit-button/edit-button"
 
 const FeedPostClient = (props: {
   user: UserDTO | null,
@@ -21,6 +22,9 @@ const FeedPostClient = (props: {
   const [creator, setCreator] = useState<UserDTO | null>(null);
   const [recommended, setRecommended] = useState<PostDTO[]>([]);
   const [loading_rec, setLoadingRec] = useState<boolean>(true);
+  const [title, setTitle] = useState<string>(props.post.title);
+  const [description, setDescription] = useState<string>(props.post.description);
+  const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -35,15 +39,30 @@ const FeedPostClient = (props: {
     })();
   }, [props.post.user_id]);
 
+  const toggleEdit = async () => {
+    if (edit) {
+      const u = await updateFeedPostFromID(props.post.id, title, description);
+    }
+    setEdit(!edit);
+  }
+
   return (
     <>
       <div className="subject">
         <div className={style.post}>
           <section className={style.splash}>
-            <h1>{props.post.title}</h1>
+            {edit ? (
+              <input type="text" name="" id="" style={{"fontSize": "2rem", "fontWeight": "700"}} defaultValue={title} onChange={(e: BaseSyntheticEvent) => setTitle(e.target.value)} />
+            ) : (
+              <h1>{title}</h1>
+            )}
           </section>
           <section className={style.info}>
-            <p>{props.post.description}</p>
+            {edit ? (
+              <textarea name="" id="" rows={5} style={{"width": "100%"}} defaultValue={description} onChange={(e: BaseSyntheticEvent) => setDescription(e.target.value)} />
+            ) : (
+              <p>{description}</p>
+            )}
             <div className={style.social}>
               {(loading_creator || creator === null) ? (
                 <LoadingWheel size_in_rems={2} />
@@ -52,6 +71,11 @@ const FeedPostClient = (props: {
                   <Link href={`/user/${creator.id}`}>
                     <UserChip user={creator} />
                   </Link>
+                  {creator.id === props.user?.id && (
+                    <>
+                      <EditButton on_click={toggleEdit} />
+                    </>
+                  )}
                 </>
               )}
               <LikeButton post={props.post} user={props.user} />

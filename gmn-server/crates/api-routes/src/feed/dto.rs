@@ -8,6 +8,14 @@ pub struct NewPostDTO {
 }
 
 #[derive(Deserialize)]
+pub struct UpdatePostDTO {
+    pub post_id: i32,
+    pub title: String,
+    pub description: String,
+}
+
+
+#[derive(Deserialize)]
 pub struct GetPostDTO {
     pub post_id: i32
 }
